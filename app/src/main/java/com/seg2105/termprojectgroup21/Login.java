@@ -16,12 +16,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +74,7 @@ public class Login extends AppCompatActivity {
                     if(task.getResult().isEmpty()) {
                         Map<String, Object> user = new HashMap<>();
                         user.put("username", username);
-                        user.put("password", password);
+                        user.put("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString());
                         user.put("role", role);
                         usersRef.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
@@ -108,7 +110,7 @@ public class Login extends AppCompatActivity {
         }
 
         //Queries for username/password and logs in user
-        usersRef.whereEqualTo("username", username).whereEqualTo("password", password).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        usersRef.whereEqualTo("username", username).whereEqualTo("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
