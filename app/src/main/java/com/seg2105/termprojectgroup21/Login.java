@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,12 +37,17 @@ public class Login extends AppCompatActivity {
     EditText username_field;
     EditText password_field;
     Spinner role_field;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        reset();
+    }
 
+    public void reset() {
+        setContentView(R.layout.activity_login);
+        user = null;
         role_field = findViewById(R.id.role_select);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.roles, android.R.layout.simple_spinner_item);
@@ -51,7 +58,8 @@ public class Login extends AppCompatActivity {
 
         username_field = findViewById(R.id.username_field);
         password_field = findViewById(R.id.password_field);
-
+        username_field.setText(null);
+        password_field.setText(null);
     }
 
     public void registerUser(View view) {
@@ -118,13 +126,22 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Invalid credentials.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-                        //TODO: Login user and change activities
+                        DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+                        user = new User(doc.getId(), doc.getString("username"), doc.getString("role"));
+                        setContentView(R.layout.activity_menu);
+                        TextView textview = findViewById(R.id.welcomeText);
+                        String welcomeString = "Welcome "+user.username+"! You are logged in as "+user.role;
+                        textview.setText(welcomeString);
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    public void logoutUser(View view) {
+        reset();
     }
 
 }
