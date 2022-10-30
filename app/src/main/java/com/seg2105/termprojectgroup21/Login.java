@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -42,12 +45,8 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        reset();
-    }
 
-    public void reset() {
         setContentView(R.layout.activity_login);
-        user = null;
         role_field = findViewById(R.id.role_select);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.roles, android.R.layout.simple_spinner_item);
@@ -127,11 +126,10 @@ public class Login extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_SHORT).show();
                         DocumentSnapshot doc = task.getResult().getDocuments().get(0);
-                        user = new User(doc.getId(), doc.getString("username"), doc.getString("role"));
-                        setContentView(R.layout.activity_menu);
-                        TextView textview = findViewById(R.id.welcomeText);
-                        String welcomeString = "Welcome "+user.username+"! You are logged in as "+user.role;
-                        textview.setText(welcomeString);
+                        saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
+
+                        Intent intent = new Intent(getApplicationContext(), Menu.class);
+                        startActivity(intent);
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
@@ -140,8 +138,13 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    public void logoutUser(View view) {
-        reset();
+    private void saveUser(String id, String username, String role) {
+        SharedPreferences sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("id", id);
+        editor.putString("username", username);
+        editor.putString("role", role);
+        editor.commit();
     }
 
 }
