@@ -18,7 +18,17 @@
     <string name="admin_temp">admin</string>
     <string name="username_item">Username:</string>
     <string name="delete">Delete</string>
+    
     <string name="course_manager_title">Course Manager</string>
     <string name="user_manager_title">User Manager</string>
 
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+
+    <string name="course_unique_id">Unique ID:</string>
+
+    <string name="course_name_item">Name:</string>
+    <string name="course_code_item">Course Code:</string>
+    <string name="course_name_temp">Sample Course</string>
+    <string name="course_code_temp">ABC0123</string>
 </resources>
