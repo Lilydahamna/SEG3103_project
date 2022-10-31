@@ -13,6 +13,13 @@
         android:theme="@style/Theme.TermProjectGroup21"
         tools:targetApi="31">
         <activity
+            android:name=".CourseEditor"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".CourseAdapter"
             android:exported="false">
             <meta-data
@@ -29,11 +36,17 @@
         </activity>
         <activity
             android:name=".CourseManager"
-            android:exported="false"
+            android:exported="true"
             android:label="Courses">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Login"
@@ -50,10 +63,14 @@
                 android:value="" />
         </activity>
         <activity
-
             android:name=".Menu"
-            android:exported="false"
+            android:exported="true"
             android:label="Admin Menu">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
             <meta-data
                 android:name="android.app.lib_name"
