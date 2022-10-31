@@ -77,8 +77,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/course_code"
-                android:inputType="textShortMessage"
-                android:importantForAutofill="no" />
+                android:importantForAutofill="no"
+                android:inputType="textShortMessage|textCapCharacters" />
         </LinearLayout>
     </LinearLayout>
 

@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/course_code"
-            android:inputType="textShortMessage"
+            android:inputType="textShortMessage|textCapCharacters"
             android:minHeight="50dp" />
     </LinearLayout>
 

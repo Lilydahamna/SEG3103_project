@@ -34,7 +34,7 @@ public class Menu extends AppCompatActivity {
         // Create onClickListeners
         logoutButton.setOnClickListener(view -> logoutUser());
 
-        // FIXME: Make it an iterable for loop over some array or sth
+        // FIXME: Make it an iterable for loop over some array or sth (Idea: add all buttons normally to layout and use .setVisibility() based on role)
         switch(sharedPref.getString("role", "")) {
             case "Admin":
                 menuSwitcher.addView(createMenuButton(R.string.course_manager_title, CourseManager.class));

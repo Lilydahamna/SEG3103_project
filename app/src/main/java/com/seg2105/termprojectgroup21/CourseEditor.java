@@ -27,10 +27,8 @@ public class CourseEditor extends AppCompatActivity {
 
     Intent intent;
     String course_id;
-    EditText new_name;
-    EditText new_code;
-    Button delete;
-    Button edit;
+    EditText new_name, new_code;
+    Button delete, edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
