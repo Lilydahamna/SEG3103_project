@@ -7,10 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +23,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.nio.charset.StandardCharsets;
@@ -127,14 +124,7 @@ public class Login extends AppCompatActivity {
                         DocumentSnapshot doc = task.getResult().getDocuments().get(0);
                         saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
 
-                        switch(doc.getString("role")) {
-                            case "Admin":
-                                startActivity(new Intent(getApplicationContext(), AdminMenu.class));
-                                break;
-                            default:
-                                // TODO: Clear stored credentials when unknown user type has logged in
-
-                        }
+                        startActivity(new Intent(getApplicationContext(), Menu.class));
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
