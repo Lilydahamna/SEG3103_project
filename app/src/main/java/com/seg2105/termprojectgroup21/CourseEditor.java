@@ -55,7 +55,7 @@ public class CourseEditor extends AppCompatActivity {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Validate fields before call
+                if(!CourseManager.areFieldsValid(getApplicationContext(), new_name.getText().toString(), new_code.getText().toString())) return;
                 updateCourse(course_id, new_name.getText().toString(), new_code.getText().toString());
             }
         });
@@ -74,23 +74,20 @@ public class CourseEditor extends AppCompatActivity {
     }
 
     public void updateCourse(String doc_id, String name, String code) {
-        if(code.matches("^([A-Z]{3}[0-9]{4})$")) {
-            Map<String, Object> course = new HashMap<>();
-            course.put("name", name);
-            course.put("code", code);
-            coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        else Toast.makeText(getApplicationContext(), "Incorrect course code.", Toast.LENGTH_SHORT).show();
+        Map<String, Object> course = new HashMap<>();
+        course.put("name", name);
+        course.put("code", code);
+        coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     public void removeCourse(String doc_id) {
         // query database for course
