@@ -111,31 +111,34 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         coursesRef.whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Map<String, Object> course = new HashMap<>();
-                    course.put("name", name);
-                    course.put("code", code);
-                    if(task.getResult().isEmpty()) { // no course found, can add a new one
-                        coursesRef.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
-                                clearFields();
-                                fetchCourses();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        // otherwise, inform user that the same course already exists
+                if(code.matches("^([A-Z]{3}[0-9]{4})$")) {
+                    if (task.isSuccessful()) {
+                        Map<String, Object> course = new HashMap<>();
+                        course.put("name", name);
+                        course.put("code", code);
+                        if(task.getResult().isEmpty()) { // no course found, can add a new one
+                            coursesRef.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
+                                    clearFields();
+                                    fetchCourses();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            // otherwise, inform user that the same course already exists
+                        } else {
+                            Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
                 }
+                else Toast.makeText(getApplicationContext(), "Incorrect course code.", Toast.LENGTH_SHORT).show();
             }
         });
     }
