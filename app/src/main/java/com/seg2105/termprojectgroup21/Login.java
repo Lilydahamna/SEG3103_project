@@ -1,8 +1,5 @@
 package com.seg2105.termprojectgroup21;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -127,8 +127,14 @@ public class Login extends AppCompatActivity {
                         DocumentSnapshot doc = task.getResult().getDocuments().get(0);
                         saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
 
-                        Intent intent = new Intent(getApplicationContext(), UserManager.class);
-                        startActivity(intent);
+                        switch(doc.getString("role")) {
+                            case "Admin":
+                                startActivity(new Intent(getApplicationContext(), AdminMenu.class));
+                                break;
+                            default:
+                                // TODO: Clear stored credentials when unknown user type has logged in
+
+                        }
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
