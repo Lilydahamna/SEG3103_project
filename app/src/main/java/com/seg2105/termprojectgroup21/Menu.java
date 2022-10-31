@@ -2,21 +2,17 @@ package com.seg2105.termprojectgroup21;
 
 import java.lang.Class;
 
-import android.app.ActionBar;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Menu extends AppCompatActivity {
-    private LinearLayout menuSwitcher;
     private SharedPreferences sharedPref;
 
 
@@ -29,18 +25,14 @@ public class Menu extends AppCompatActivity {
         // Create Objects corresponding to UI elements
         TextView textView = findViewById(R.id.welcomeText);
         Button logoutButton = findViewById(R.id.logout);
-        menuSwitcher = findViewById(R.id.menuSwitcher);
+        LinearLayout menuSwitcher = findViewById(R.id.menuSwitcher);
 
 
         // Set Text strings
         textView.setText("Welcome "+sharedPref.getString("username", "")+"! You are logged in as "+sharedPref.getString("role", ""));
 
         // Create onClickListeners
-        logoutButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                logoutUser();
-            }
-        });
+        logoutButton.setOnClickListener(view -> logoutUser());
 
         // FIXME: Make it an iterable for loop over some array or sth
         switch(sharedPref.getString("role", "")) {
@@ -59,12 +51,7 @@ public class Menu extends AppCompatActivity {
         params.setMargins(0, 0, 0, 0);
         menuButton.setLayoutParams(params);
         menuButton.setText(stringReference);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), activity));
-            }
-        });
+        menuButton.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), activity)));
 
         return menuButton;
     }

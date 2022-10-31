@@ -11,19 +11,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -69,33 +62,20 @@ public class Login extends AppCompatActivity {
         }
 
         //Query for username
-        usersRef.whereEqualTo("username", username).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    //If no entries exist, register. Otherwise do not.
-                    if(task.getResult().isEmpty()) {
-                        Map<String, Object> user = new HashMap<>();
-                        user.put("username", username);
-                        user.put("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString());
-                        user.put("role", role);
-                        usersRef.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
-                    }
+        usersRef.whereEqualTo("username", username).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                //If no entries exist, register. Otherwise do not.
+                if(task.getResult().isEmpty()) {
+                    Map<String, Object> user = new HashMap<>();
+                    user.put("username", username);
+                    user.put("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString());
+                    user.put("role", role);
+                    usersRef.add(user).addOnSuccessListener(documentReference -> Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show());
                 } else {
-                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -113,22 +93,19 @@ public class Login extends AppCompatActivity {
         }
 
         //Queries for username/password and logs in user
-        usersRef.whereEqualTo("username", username).whereEqualTo("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    if(task.getResult().isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Invalid credentials.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-                        DocumentSnapshot doc = task.getResult().getDocuments().get(0);
-                        saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
-
-                        startActivity(new Intent(getApplicationContext(), Menu.class));
-                    }
+        usersRef.whereEqualTo("username", username).whereEqualTo("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if(task.getResult().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Invalid credentials.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_SHORT).show();
+                    DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+                    saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
+
+                    startActivity(new Intent(getApplicationContext(), Menu.class));
                 }
+            } else {
+                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
             }
         });
     }
