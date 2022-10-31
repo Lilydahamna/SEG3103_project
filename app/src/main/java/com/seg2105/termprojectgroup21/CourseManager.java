@@ -54,8 +54,6 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         courseAdapter = new CourseAdapter(this, courses, this);
         recyclerView.setAdapter(courseAdapter);
 
-        fetchCourses();
-
         inputName = findViewById(R.id.course_name);
         inputCode = findViewById(R.id.course_code);
 
@@ -65,9 +63,16 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Validate Fields before calling
                 addCourse(inputName.getText().toString(), inputCode.getText().toString());
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fetchCourses();
     }
 
     private void fetchCourses() {
@@ -89,12 +94,16 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     @Override
     public void onItemClick(Course course) {
-        Toast.makeText(getApplicationContext(), "You clicked on: "+course.getName(), Toast.LENGTH_SHORT).show();
-
-        //TODO: When CourseEditor activity is done, uncomment these. Then getIntent().getExtras().getString("doc_id") to get the passed parameter in that activity
         Intent intent = new Intent(getApplicationContext(), CourseEditor.class);
         intent.putExtra("doc_id", course.getId());
+        intent.putExtra("name", course.getName());
+        intent.putExtra("code", course.getCode());
         startActivity(intent);
+    }
+
+    private void clearFields() {
+        inputCode.setText("");
+        inputName.setText("");
     }
 
     public void addCourse(String name, String code) {
@@ -111,6 +120,8 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
+                                clearFields();
+                                fetchCourses();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

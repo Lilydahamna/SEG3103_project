@@ -19,16 +19,17 @@
             android:id="@+id/course_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
             android:ems="10"
-            android:hint="@string/course_name_item" />
+            android:hint="@string/course_name"
+            android:inputType="text"
+            android:minHeight="50dp" />
 
         <EditText
             android:id="@+id/course_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/course_code_item"
+            android:hint="@string/course_code"
             android:inputType="textShortMessage"
             android:minHeight="50dp" />
     </LinearLayout>

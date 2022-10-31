@@ -14,7 +14,8 @@
         tools:targetApi="31">
         <activity
             android:name=".CourseEditor"
-            android:exported="false">
+            android:exported="false"
+            android:label="Edit Course Information">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -36,17 +37,11 @@
         </activity>
         <activity
             android:name=".CourseManager"
-            android:exported="true"
+            android:exported="false"
             android:label="Courses">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Login"

@@ -32,4 +32,10 @@
     <string name="course_name_temp">Sample Course</string>
     <string name="course_code_temp">ABC0123</string>
     <string name="edit">EDIT</string>
+    <string name="name">Name</string>
+    <string name="code">Code</string>
+    <string name="course_name">Course Name</string>
+    <string name="course_code">Course Code</string>
+    <string name="update">Update</string>
+    <string name="basic_details">Basic Details</string>
 </resources>

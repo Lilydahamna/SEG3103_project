@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -27,8 +28,8 @@ public class Login extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersRef = db.collection("users");
 
-    EditText username_field;
-    EditText password_field;
+    Button register, login;
+    EditText username_field, password_field;
     Spinner role_field;
 
     @Override
@@ -46,11 +47,22 @@ public class Login extends AppCompatActivity {
 
         username_field = findViewById(R.id.username_field);
         password_field = findViewById(R.id.password_field);
-        username_field.setText(null);
-        password_field.setText(null);
+        register = findViewById(R.id.register);
+        login = findViewById(R.id.login);
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerUser();
+            }
+        });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { loginUser(); }
+        });
     }
 
-    public void registerUser(View view) {
+    public void registerUser() {
         String username = username_field.getText().toString();
         String password = password_field.getText().toString();
         String role = role_field.getSelectedItem().toString();
@@ -80,8 +92,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("NotConstructor")
-    public void loginUser(View view) {
+    public void loginUser() {
         String username = username_field.getText().toString();
         String password = password_field.getText().toString();
 
@@ -102,6 +113,7 @@ public class Login extends AppCompatActivity {
                     saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
 
                     startActivity(new Intent(getApplicationContext(), Menu.class));
+                    finish();
                 }
             } else {
                 Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
