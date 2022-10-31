@@ -2,10 +2,12 @@ package com.seg2105.termprojectgroup21;
 
 
 import android.content.Context;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,40 +16,35 @@ import java.util.ArrayList;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    public static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView username;
         TextView role;
-        onItemClickListener listener;
 
-        public UserViewHolder(View view, onItemClickListener listener) {
+        public UserViewHolder(View view) {
             super(view);
 
             username = view.findViewById(R.id.user_username);
             role = view.findViewById(R.id.user_role);
-            view.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            listener.onItemClick(getAdapterPosition());
-        }
     }
 
     Context context;
     ArrayList<User> users;
-    onItemClickListener onItemClickListener;
+    onItemClickListener listener;
 
-    public UserAdapter(Context context, ArrayList<User> users, onItemClickListener onItemClickListener) {
+
+    public UserAdapter(Context context, ArrayList<User> users, onItemClickListener listener) {
         this.context = context;
         this.users = users;
-        this.onItemClickListener = onItemClickListener;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
-        return new UserViewHolder(view, onItemClickListener);
+        return new UserViewHolder(view);
     }
 
     @Override
@@ -55,6 +52,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         User user = users.get(position);
         holder.username.setText(user.getUsername());
         holder.role.setText(user.getRole());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(user);
+            }
+        });
     }
 
     @Override
@@ -63,6 +67,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     }
 
     public interface onItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(User user);
     }
+
 }
