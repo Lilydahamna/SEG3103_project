@@ -72,9 +72,9 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         Toast.makeText(getApplicationContext(), "You clicked on: "+course.getName(), Toast.LENGTH_SHORT).show();
 
         //TODO: When CourseEditor activity is done, uncomment these. Then getIntent().getExtras().getString("doc_id") to get the passed parameter in that activity
-        //Intent intent = new Intent(getApplicationContext(), CourseEditor.class);
-        //intent.putExtra("doc_id", course.getId());
-        //startActivity(intent);
+        Intent intent = new Intent(getApplicationContext(), CourseEditor.class);
+        intent.putExtra("doc_id", course.getId());
+        startActivity(intent);
     }
 
     public void addCourse(String name, String code) {
@@ -109,35 +109,5 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         });
     }
 
-    public void removeCourse(String doc_id) {
-        // query database for course
-        coursesRef.document(doc_id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Course successfully deleted!", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Error deleting course!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
-    public void updateCourse(String doc_id, String name, String code) {
-        Map<String, Object> course = new HashMap<>();
-        course.put("name", name);
-        course.put("code", code);
-        coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }
