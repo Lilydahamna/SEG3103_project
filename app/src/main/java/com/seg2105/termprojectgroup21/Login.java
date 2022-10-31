@@ -40,7 +40,6 @@ public class Login extends AppCompatActivity {
     EditText username_field;
     EditText password_field;
     Spinner role_field;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +127,7 @@ public class Login extends AppCompatActivity {
                         DocumentSnapshot doc = task.getResult().getDocuments().get(0);
                         saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
 
-                        Intent intent = new Intent(getApplicationContext(), Menu.class);
+                        Intent intent = new Intent(getApplicationContext(), UserManager.class);
                         startActivity(intent);
                     }
                 } else {

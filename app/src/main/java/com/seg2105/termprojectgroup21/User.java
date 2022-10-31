@@ -10,4 +10,16 @@ public class User {
         this.username = username;
         this.role = role;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getRole() {
+        return role;
+    }
 }

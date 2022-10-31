@@ -11,4 +11,16 @@ public class Course {
         this.code = code;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
 }

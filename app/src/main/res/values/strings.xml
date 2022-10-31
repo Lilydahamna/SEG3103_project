@@ -11,4 +11,11 @@
         <item>Student</item>
         <item>Instructor</item>
     </string-array>
+    <string name="courses">Courses</string>
+    <string name="users">Users</string>
+    <string name="role">Role:</string>
+    <string name="admin">Admin</string>
+    <string name="admin_temp">admin</string>
+    <string name="username_item">Username:</string>
+    <string name="delete">Delete</string>
 </resources>
