@@ -29,7 +29,7 @@ public class Menu extends AppCompatActivity {
 
 
         // Set Text strings
-        textView.setText("Welcome "+sharedPref.getString("username", "")+"! You are logged in as "+sharedPref.getString("role", ""));
+        textView.setText("Welcome "+sharedPref.getString("username", "")+"!\nYou are logged in as "+sharedPref.getString("role", "")+".");
 
         // Create onClickListeners
         logoutButton.setOnClickListener(view -> logoutUser());
@@ -41,6 +41,11 @@ public class Menu extends AppCompatActivity {
                 menuSwitcher.addView(createMenuButton(R.string.user_manager_title, UserManager.class));
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
     private Button createMenuButton(int stringReference, Class activity) {
