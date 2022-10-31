@@ -18,6 +18,9 @@
     <string name="admin_temp">admin</string>
     <string name="username_item">Username:</string>
     <string name="delete">Delete</string>
+    
+    <string name="course_manager_title">Course Manager</string>
+    <string name="user_manager_title">User Manager</string>
 
     <string name="add">Add</string>
     <string name="search">Search</string>

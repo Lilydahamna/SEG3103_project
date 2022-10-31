@@ -50,9 +50,11 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Menu"
+
+            android:name=".AdminMenu"
             android:exported="false"
-            android:label="Main Menu">
+            android:label="Admin Menu">
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
