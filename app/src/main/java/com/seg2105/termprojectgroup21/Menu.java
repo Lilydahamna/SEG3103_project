@@ -58,7 +58,6 @@ public class Menu extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 0, 0);
         menuButton.setLayoutParams(params);
-        menuButton.back
         menuButton.setText(stringReference);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
