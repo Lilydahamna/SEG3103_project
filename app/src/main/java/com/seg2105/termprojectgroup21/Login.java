@@ -127,7 +127,7 @@ public class Login extends AppCompatActivity {
                         DocumentSnapshot doc = task.getResult().getDocuments().get(0);
                         saveUser(doc.getId(), doc.getString("username"), doc.getString("role"));
 
-                        Intent intent = new Intent(getApplicationContext(), UserManager.class);
+                        Intent intent = new Intent(getApplicationContext(), CourseManager.class);
                         startActivity(intent);
                     }
                 } else {

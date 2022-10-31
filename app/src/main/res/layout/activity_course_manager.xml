@@ -15,12 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/course_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/course_unique_id" />
-
         <EditText
             android:id="@+id/course_name"
             android:layout_width="match_parent"

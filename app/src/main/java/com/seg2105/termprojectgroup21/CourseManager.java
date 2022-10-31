@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -68,7 +69,12 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     @Override
     public void onItemClick(Course course) {
-        Toast.makeText(getApplicationContext(), "You clicked on: ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "You clicked on: "+course.getName(), Toast.LENGTH_SHORT).show();
+
+        //TODO: When CourseEditor activity is done, uncomment these. Then getIntent().getExtras().getString("doc_id") to get the passed parameter in that activity
+        //Intent intent = new Intent(getApplicationContext(), CourseEditor.class);
+        //intent.putExtra("doc_id", course.getId());
+        //startActivity(intent);
     }
 
     public void addCourse(String name, String code) {
