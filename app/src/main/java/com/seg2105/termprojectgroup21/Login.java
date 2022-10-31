@@ -84,7 +84,6 @@ public class Login extends AppCompatActivity {
     public void loginUser(View view) {
         String username = username_field.getText().toString();
         String password = password_field.getText().toString();
-        String role = role_field.getSelectedItem().toString();
 
         //Validate fields (can be expanded later)
         if(username.equals("") || password.equals("")) {
