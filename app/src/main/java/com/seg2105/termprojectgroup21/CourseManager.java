@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +38,10 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     RecyclerView recyclerView;
     CourseAdapter courseAdapter;
     ArrayList<Course> courses = new ArrayList<>();
+    Button add;
+    Button search;
+    EditText inputName;
+    EditText inputCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,19 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         recyclerView.setAdapter(courseAdapter);
 
         fetchCourses();
+
+        inputName = findViewById(R.id.course_name);
+        inputCode = findViewById(R.id.course_code);
+
+        add = findViewById(R.id.addBtn);
+        search = findViewById(R.id.findBtn);
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCourse(inputName.getText().toString(), inputCode.getText().toString());
+            }
+        });
     }
 
     private void fetchCourses() {

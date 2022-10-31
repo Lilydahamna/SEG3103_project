@@ -45,7 +45,7 @@
         android:layout_height="68dp"
         android:ems="10"
         android:hint="Course Code:"
-        android:inputType="textPersonName"
+        android:inputType="textShortMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
