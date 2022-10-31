@@ -67,7 +67,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(Course course) {
         Toast.makeText(getApplicationContext(), "You clicked on: ", Toast.LENGTH_SHORT).show();
     }
 
@@ -94,7 +94,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                         });
                         // otherwise, inform user that the same course already exists
                     } else {
-                        Toast.makeText(getApplicationContext(), "Course already exists.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
@@ -103,10 +103,9 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         });
     }
 
-    public void removeCourse(String code) {
+    public void removeCourse(String doc_id) {
         // query database for course
-        DocumentReference course_to_delete = coursesRef.document(String.valueOf(coursesRef.whereEqualTo("code", code)));
-        course_to_delete.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        coursesRef.document(doc_id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(getApplicationContext(), "Course successfully deleted!", Toast.LENGTH_SHORT).show();
@@ -119,34 +118,19 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         });
     }
 
-    public void editCourseName(String id, String new_name) {
-        // query database for course
-        DocumentReference course_to_edit = coursesRef.document(id);
-        course_to_edit.update("name", new_name).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void updateCourse(String doc_id, String name, String code) {
+        Map<String, Object> course = new HashMap<>();
+        course.put("name", name);
+        course.put("code", code);
+        coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Course name successfully edited!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Error editing course name!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void editCourseCode(String id, String new_code) {
-        // query database for course
-        DocumentReference course_to_edit = coursesRef.document(id);
-        course_to_edit.update("code", new_code).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Course code successfully edited!", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Error editing course code!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
             }
         });
     }
