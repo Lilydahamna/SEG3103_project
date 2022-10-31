@@ -53,7 +53,7 @@
 
             android:name=".Menu"
             android:exported="false"
-            android:label="Admin Menu">
+            android:label="Main Menu">
 
             <meta-data
                 android:name="android.app.lib_name"
