@@ -13,9 +13,9 @@
         android:layout_height="60dp"
         android:layout_marginStart="70dp"
         android:layout_marginTop="500dp"
+        android:text="@string/delete"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/delete" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/EditCourse"
@@ -34,17 +34,21 @@
         android:ems="10"
         android:hint="Course Name:"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="7dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/CourseCode"
         android:layout_width="410dp"
         android:layout_height="68dp"
         android:ems="10"
         android:hint="Course Code:"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="83dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CourseName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
