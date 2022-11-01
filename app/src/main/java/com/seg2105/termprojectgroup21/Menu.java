@@ -45,7 +45,7 @@ public class Menu extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //Do nothing
+        moveTaskToBack(true);
     }
 
     private Button createMenuButton(int stringReference, Class activity) {
