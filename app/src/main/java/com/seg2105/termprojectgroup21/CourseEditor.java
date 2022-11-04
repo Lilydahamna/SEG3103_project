@@ -12,10 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,21 +78,38 @@ public class CourseEditor extends AppCompatActivity {
     }
 
     public void updateCourse(String doc_id, String name, String code) {
-        Map<String, Object> course = new HashMap<>();
-        course.put("name", name);
-        course.put("code", code);
-        coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
+        coursesRef.whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Map<String, Object> course = new HashMap<>();
+                    course.put("name", name);
+                    course.put("code", code);
+                    if(task.getResult().isEmpty() || (task.getResult().size() == 1 && task.getResult().getDocuments().get(0).getId().equals(doc_id))) { // no course found or code unchanged, can add a new one
+                        coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        // otherwise, inform user that the same course already exists
+                    } else {
+                        Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+
     }
+
     public void removeCourse(String doc_id) {
         // query database for course
         coursesRef.document(doc_id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
