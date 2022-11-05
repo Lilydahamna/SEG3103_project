@@ -40,6 +40,9 @@ public class Menu extends AppCompatActivity {
                 menuSwitcher.addView(createMenuButton(R.string.course_manager_title, CourseManager.class));
                 menuSwitcher.addView(createMenuButton(R.string.user_manager_title, UserManager.class));
                 break;
+            case "Instructor":
+                menuSwitcher.addView(createMenuButton(R.string.course_manager_title, CourseManager.class));
+                break;
         }
     }
 

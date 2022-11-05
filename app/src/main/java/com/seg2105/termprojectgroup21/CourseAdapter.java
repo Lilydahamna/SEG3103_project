@@ -17,12 +17,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     public static class CourseViewHolder extends RecyclerView.ViewHolder{
         TextView name;
         TextView code;
+        TextView instructor;
 
         public CourseViewHolder(View view) {
             super(view);
 
             name = view.findViewById(R.id.course_name);
             code = view.findViewById(R.id.course_code);
+            instructor = view.findViewById(R.id.instructor_username);
         }
 
     }
@@ -49,6 +51,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         Course course = courses.get(position);
         holder.name.setText(course.getName());
         holder.code.setText(course.getCode());
+        holder.instructor.setText(course.getInstructor());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

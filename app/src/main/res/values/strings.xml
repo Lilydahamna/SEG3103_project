@@ -38,4 +38,6 @@
     <string name="course_code">Course Code</string>
     <string name="update">Update</string>
     <string name="basic_details">Basic Details</string>
+    <string name="instructor">Instructor:</string>
+    <string name="user123">User123</string>
 </resources>

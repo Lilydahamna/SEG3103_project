@@ -1,12 +1,15 @@
 package com.seg2105.termprojectgroup21;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CourseManager extends AppCompatActivity implements CourseAdapter.onItemClickListener {
-
+    private SharedPreferences sharedPref;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference coursesRef = db.collection("courses");
     RecyclerView recyclerView;
@@ -48,7 +51,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_manager);
-
+        sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE);
         recyclerView = findViewById(R.id.courses_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -96,7 +99,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        courses.add(new Course(doc.getId(), doc.getString("name"), doc.getString("code")));
+                        courses.add(new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username")));
                     }
                     courseAdapter.notifyDataSetChanged();
                 } else {
@@ -108,11 +111,63 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     @Override
     public void onItemClick(Course course) {
+        switch (sharedPref.getString("role", "")) {
+            case "Admin":
+                adminPress(course);
+                break;
+            case "Instructor":
+                instructorPress(course);
+                break;
+        }
+    }
+
+    private void adminPress(Course course) {
         Intent intent = new Intent(getApplicationContext(), CourseEditor.class);
         intent.putExtra("doc_id", course.getId());
         intent.putExtra("name", course.getName());
         intent.putExtra("code", course.getCode());
         startActivity(intent);
+    }
+
+    private void instructorPress(Course course) {
+        if(sharedPref.getString("username", "").equals(course.getInstructor())) {
+            //TODO: attach all the instructor fields using putExtra so they can be used in the instructor course editor.
+            //Intent intent = new Intent(getApplicationContext(), CourseEditorInstructor.class);
+            //intent.putExtra("doc_id", course.getId());
+            //startActivity(intent);
+            Toast.makeText(getApplicationContext(), "Enter Course Editor for Instructors.", Toast.LENGTH_SHORT).show();
+        } else if (course.getInstructor() == null) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Instructor Assignment")
+                    .setMessage("Would you like to assign yourself as an instructor for this course?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            assignInstructor(course.getId());
+                        }})
+                    .setNegativeButton("No", null).show();
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle("Instructor Assignment")
+                    .setMessage("There is already an instructor assigned to this course.")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Ok", null).show();
+        }
+    }
+
+    private void assignInstructor(String doc_id) {
+        coursesRef.document(doc_id).update("instructor_username", sharedPref.getString("username", "")).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(getApplicationContext(), "Instructor assigned.", Toast.LENGTH_SHORT).show();
+                fetchCourses();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Error assigning instructor.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void clearFields() {

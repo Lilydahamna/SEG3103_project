@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
@@ -25,7 +25,6 @@
             android:layout_height="match_parent"
             android:layout_weight="0.1"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -73,6 +72,32 @@
                     android:text="@string/course_code_temp"
                     android:textAlignment="viewStart"
                     android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/instructor"
+                    android:textAlignment="viewEnd"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/instructor_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/user123"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+
             </LinearLayout>
         </LinearLayout>
 
