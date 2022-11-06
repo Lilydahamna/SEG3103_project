@@ -40,4 +40,10 @@
     <string name="basic_details">Basic Details</string>
     <string name="instructor">Instructor:</string>
     <string name="user123">User123</string>
+    <string name="un_assign">Un-Assign</string>
+    <string name="description">Description</string>
+    <string name="description_title">Description:</string>
+    <string name="course_details">Course Details</string>
+    <string name="capacity">Capacity:</string>
+    <string name="of_students"># of Students</string>
 </resources>

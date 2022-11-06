@@ -132,9 +132,9 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     private void instructorPress(Course course) {
         if(sharedPref.getString("username", "").equals(course.getInstructor())) {
             //TODO: attach all the instructor fields using putExtra so they can be used in the instructor course editor.
-            //Intent intent = new Intent(getApplicationContext(), CourseEditorInstructor.class);
-            //intent.putExtra("doc_id", course.getId());
-            //startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), CourseEditorInstructor.class);
+            intent.putExtra("doc_id", course.getId());
+            startActivity(intent);
             Toast.makeText(getApplicationContext(), "Enter Course Editor for Instructors.", Toast.LENGTH_SHORT).show();
         } else if (course.getInstructor() == null) {
             new AlertDialog.Builder(this)
