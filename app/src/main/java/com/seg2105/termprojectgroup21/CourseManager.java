@@ -90,6 +90,8 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                     addCourse(inputName.getText().toString(), inputCode.getText().toString());
                 }
             });
+        }else{
+            params.setMargins(0,0,0,0);
         }
         temp.setLayoutParams(params);
         btnLayout.addView(temp);
