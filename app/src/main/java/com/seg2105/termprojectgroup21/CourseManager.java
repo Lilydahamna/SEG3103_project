@@ -10,10 +10,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,6 +48,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     Button search;
     EditText inputName;
     EditText inputCode;
+    LinearLayout btnLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +64,37 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         inputName = findViewById(R.id.course_name);
         inputCode = findViewById(R.id.course_code);
 
-        add = findViewById(R.id.addBtn);
-        search = findViewById(R.id.findBtn);
+        btnLayout = findViewById(R.id.btnLayout);
+        search = createButton(R.string.search);
+        //create add button only if logged in as admin
+        if(sharedPref.getString("role", "").equals("Admin")){
+            add = createButton(R.string.add);
+        }
 
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!areFieldsValid(getApplicationContext(), inputName.getText().toString(), inputCode.getText().toString())) return;
-                addCourse(inputName.getText().toString(), inputCode.getText().toString());
-            }
-        });
+
     }
-
+    private Button createButton(int stringReference){
+        Button temp = new Button(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                100);
+        temp.setBackgroundColor(Color.parseColor("#FF6200EE"));
+        temp.setTextColor(Color.parseColor("#FFFFFFFF"));
+        temp.setText(stringReference);
+        if(stringReference == R.string.add){
+            params.setMargins(40,0,0,0);
+            temp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!areFieldsValid(getApplicationContext(), inputName.getText().toString(), inputCode.getText().toString())) return;
+                    addCourse(inputName.getText().toString(), inputCode.getText().toString());
+                }
+            });
+        }
+        temp.setLayoutParams(params);
+        btnLayout.addView(temp);
+        return temp;
+    }
     public static boolean areFieldsValid(Context context, String name, String code) {
         if(name.isEmpty()) {
             Toast.makeText(context, "Invalid course name.", Toast.LENGTH_SHORT).show();
