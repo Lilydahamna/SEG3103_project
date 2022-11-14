@@ -134,16 +134,19 @@ public class CourseManagerTest {
 
     @Test
     public void testAreFieldsValid() {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        boolean[] expectedArray = {false, false, false, false, true, false, false, false};
-        boolean[] actualArray = {CourseManager.areFieldsValid(appContext,"", ""),
-                CourseManager.areFieldsValid(appContext,"name", ""),
-                CourseManager.areFieldsValid(appContext,"name", "code"),
-                CourseManager.areFieldsValid(appContext,"name", "tst1234"),
-                CourseManager.areFieldsValid(appContext,"name", "TST1234"),
-                CourseManager.areFieldsValid(appContext,"", "TST1234"),
-                CourseManager.areFieldsValid(appContext,"", "tst1234"),
-                CourseManager.areFieldsValid(appContext,"", "code")};
-        assertArrayEquals(expectedArray, actualArray);
+
+        courseManagerRule.getScenario().onActivity(activity -> {
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            boolean[] expectedArray = {false, false, false, false, true, false, false, false};
+            boolean[] actualArray = {CourseManager.areFieldsValid(appContext,"", ""),
+                    CourseManager.areFieldsValid(appContext,"name", ""),
+                    CourseManager.areFieldsValid(appContext,"name", "code"),
+                    CourseManager.areFieldsValid(appContext,"name", "tst1234"),
+                    CourseManager.areFieldsValid(appContext,"name", "TST1234"),
+                    CourseManager.areFieldsValid(appContext,"", "TST1234"),
+                    CourseManager.areFieldsValid(appContext,"", "tst1234"),
+                    CourseManager.areFieldsValid(appContext,"", "code")};
+            assertArrayEquals(expectedArray, actualArray);
+        });
     }
 }
