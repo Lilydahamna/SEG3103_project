@@ -105,8 +105,6 @@ public class CourseEditor extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     public void removeCourse(String doc_id) {

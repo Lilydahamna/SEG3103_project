@@ -36,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class CourseManager extends AppCompatActivity implements CourseAdapter.onItemClickListener {
     private SharedPreferences sharedPref;
@@ -44,7 +45,6 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     RecyclerView recyclerView;
     CourseAdapter courseAdapter;
     ArrayList<Course> courses = new ArrayList<>();
-    ArrayList<Course> courseSearch;
     Button add;
     Button search;
     EditText inputName;
@@ -56,12 +56,11 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_manager);
         sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE);
-        recyclerView = findViewById(R.id.courses_list);
-        recyclerView.setHasFixedSize(true);
+        recyclerView = findViewById(R.id.schedule);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseAdapter = new CourseAdapter(this, courses, this);
         recyclerView.setAdapter(courseAdapter);
-
 
         inputName = findViewById(R.id.course_name);
         inputCode = findViewById(R.id.course_code);
@@ -75,7 +74,6 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
 
     }
-
     private Button createButton(int stringReference){
         Button temp = new Button(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -95,39 +93,11 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             });
         }else{
             params.setMargins(0,0,0,0);
-            temp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchCourse(inputName.getText().toString(), inputCode.getText().toString());
-                }
-            });
         }
         temp.setLayoutParams(params);
         btnLayout.addView(temp);
         return temp;
     }
-
-    private void searchCourse(String name, String code){
-        ArrayList<Course> result = new ArrayList<>();
-        for(Course course: courses){
-            if(!code.equals("") && !name.equals("")){
-                if(course.code.equals(code) && course.name.equals(name)){
-                    result.add(course);
-                }
-            }else if(!code.equals("") && name.equals("")){
-                if(course.code.equals(code)){
-                    result.add(course);
-                }
-            }else if(!name.equals("")){
-                if(course.name.equals(name)){
-                    result.add(course);
-                }
-            }
-        }
-        courseAdapter.filterList(result);
-
-    }
-
     public static boolean areFieldsValid(Context context, String name, String code) {
         if(name.isEmpty()) {
             Toast.makeText(context, "Invalid course name.", Toast.LENGTH_SHORT).show();
@@ -189,6 +159,9 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             //TODO: attach all the instructor fields using putExtra so they can be used in the instructor course editor.
             Intent intent = new Intent(getApplicationContext(), CourseEditorInstructor.class);
             intent.putExtra("doc_id", course.getId());
+            intent.putExtra("capacity", course.getCapacity());
+            intent.putExtra("code", course.getCode());
+            intent.putExtra("description", course.getDescription());
             startActivity(intent);
             Toast.makeText(getApplicationContext(), "Enter Course Editor for Instructors.", Toast.LENGTH_SHORT).show();
         } else if (course.getInstructor() == null) {
@@ -264,5 +237,39 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         });
     }
 
-
+    // copy of above method which deals with instructor usernames (METHOD OVERLOADING)
+    public void addCourse(String name, String code, String instructor_username) {
+        // query for course, in case it already exists
+        coursesRef.whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Map<String, Object> course = new HashMap<>();
+                    course.put("name", name);
+                    course.put("code", code);
+                    course.put("instructor_username", instructor_username);
+                    if(task.getResult().isEmpty()) { // no course found, can add a new one
+                        coursesRef.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
+                                clearFields();
+                                fetchCourses();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        // otherwise, inform user that the same course already exists
+                    } else {
+                        Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }
