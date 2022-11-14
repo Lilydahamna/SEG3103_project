@@ -8,22 +8,6 @@ public class Course {
 
     int capacity;
 
-    public Course (String id, String name, String code, String instructor_username) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.instructor_username = instructor_username;
-    }
-
-    // UNUSED CONSTRUCTORS ADDED BY BENJAMIN:
-    public Course (String id, String name, String code, String instructor_username, int capacity) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.instructor_username = instructor_username;
-        this.capacity = capacity;
-    }
-
     public Course (String id, String name, String code, String instructor_username, int capacity, String description) {
         this.id = id;
         this.name = name;

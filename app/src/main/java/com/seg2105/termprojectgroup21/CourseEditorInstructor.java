@@ -94,15 +94,9 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!CourseEditorInstructor.areCourseFieldsValid(getApplicationContext(), Integer.parseInt(capacity.getText().toString()))) return; //Course Validation
-                updateCourse(course_id, description.getText().toString(), Integer.parseInt(capacity.getText().toString()));
-                // IMPLEMENT REGEX FOR COURSE TIMES!!!!
-                //if(!CourseEditorInstructor.areEventFieldsValid(getApplicationContext(), start_time.getText().toString(), end_time.getText().toString())) return; //Event Validation
+                if(CourseEditorInstructor.areCourseFieldsValid(getApplicationContext(), Integer.parseInt(capacity.getText().toString()))) updateCourse(course_id, description.getText().toString(), Integer.parseInt(capacity.getText().toString()));
                 int day = 0; // default value
                 switch (day_picker.getSelectedItem().toString()) {
-                    case "Monday":
-                        day = 0;
-                        break;
                     case "Tuesday":
                         day = 1;
                         break;
@@ -116,7 +110,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
                         day = 4;
                         break;
                 }
-                addEvent(course_id, day, start_time.getText().toString(), end_time.getText().toString());
+                if (areEventFieldsValid(getApplicationContext(), start_time.getText().toString(), end_time.getText().toString())) addEvent(course_id, day, start_time.getText().toString(), end_time.getText().toString());
             }
         });
     }
@@ -141,7 +135,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
     }
 
     public static boolean areCourseFieldsValid(Context context, int capacity) {
-        if(capacity <= 0) {
+        if(capacity < 0) {
             Toast.makeText(context, "Invalid course capacity.", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -150,7 +144,8 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
 
     // expand later IMPLEMENT REGEX
     public static boolean areEventFieldsValid(Context context, String start_time, String end_time) {
-        if(start_time.isEmpty() || end_time.isEmpty()) {
+        if(start_time.isEmpty() || end_time.isEmpty() ) return false;
+        if(!start_time.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$") || !end_time.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
             Toast.makeText(context, "Invalid start/end times.", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -159,7 +154,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
 
     public void addEvent(String doc_id, int day, String start_time, String end_time) {
         // query for event, in case it already exists (in terms of day)
-        scheduleRef.whereEqualTo("course_id", doc_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        scheduleRef.whereEqualTo("course_id", doc_id).whereEqualTo("day", day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -254,12 +249,39 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        unassign();
+                        unassign(course_id);
                     }})
                 .setNegativeButton("No", null).show();
     }
 
-    public void unassign() {
-
+    public void unassign(String doc_id) {
+        Map<String, Object> course = new HashMap<>();
+        course.put("description", "");
+        course.put("instructor_username", "");
+        course.put("capacity", 0);
+        coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                scheduleRef.whereEqualTo("course_id", course_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                doc.getReference().delete();
+                            }
+                            Toast.makeText(getApplicationContext(), "Unassigned successfully.", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error unassigning.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Error unassigning.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
