@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,21 +24,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-//import com.google.common.hash.Hashing;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-//import com.google.firebase.firestore.GetOptions;
-//import com.google.firebase.firestore.QueryDocumentSnapshot;
-//import com.google.firebase.firestore.QuerySnapshot;
 
-//import java.nio.charset.StandardCharsets;
+
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 public class CourseManager extends AppCompatActivity implements CourseAdapter.onItemClickListener {
     private SharedPreferences sharedPref;
@@ -190,7 +187,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     private void fetchCourses() {
         courses.clear();
-        coursesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<?> fetchTask = coursesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -204,6 +201,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             }
         });
 
+        while(!fetchTask.isComplete());
     }
 
     @Override
@@ -253,7 +251,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     }
 
     private void assignInstructor(String doc_id) {
-        coursesRef.document(doc_id).update("instructor_username", sharedPref.getString("username", "")).addOnSuccessListener(new OnSuccessListener<Void>() {
+        Task<?> assignTask = coursesRef.document(doc_id).update("instructor_username", sharedPref.getString("username", "")).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(getApplicationContext(), "Instructor assigned.", Toast.LENGTH_SHORT).show();
@@ -265,6 +263,8 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                 Toast.makeText(getApplicationContext(), "Error assigning instructor.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        while(!assignTask.isComplete());
     }
 
     private void clearFields() {
@@ -274,7 +274,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     public void addCourse(String name, String code) {
         // query for course, in case it already exists
-        coursesRef.whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<?> addTask = coursesRef.whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -307,6 +307,8 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                 }
             }
         });
+
+        while(!addTask.isComplete());
     }
 
 }
