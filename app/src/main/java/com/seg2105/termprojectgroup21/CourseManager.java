@@ -11,7 +11,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,6 +74,44 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         if(sharedPref.getString("role", "").equals("Admin")){
             add = createButton(R.string.add);
         }
+
+        inputCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.toString().length() == 0 && inputName.getText().toString().length() == 0){
+                    courseAdapter.filterList(courses);
+                }
+            }
+        });
+        inputName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.toString().length() == 0 && inputCode.getText().toString().length() == 0){
+                    courseAdapter.filterList(courses);
+                }
+            }
+        });
+
     }
     private Button createButton(int stringReference){
         Button temp = new Button(this);
@@ -96,6 +137,31 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         btnLayout.addView(temp);
         return temp;
     }
+
+    private void searchCourse(String name, String code){
+        ArrayList<Course> result = new ArrayList<>();
+        if(name.length() == 0 && code.length() == 0){
+            result = courses;
+        }
+        for(Course course: courses){
+            if(!code.equals("") && !name.equals("")){
+                if(course.code.equals(code) && course.name.equals(name)){
+                    result.add(course);
+                }
+            }else if(!code.equals("") && name.equals("")){
+                if(course.code.equals(code)){
+                    result.add(course);
+                }
+            }else if(!name.equals("")){
+                if(course.name.equals(name)){
+                    result.add(course);
+                }
+            }
+        }
+        courseAdapter.filterList(result);
+
+    }
+
     public static boolean areFieldsValid(Context context, String name, String code) {
         if(name.isEmpty()) {
             Toast.makeText(context, "Invalid course name.", Toast.LENGTH_SHORT).show();
@@ -113,6 +179,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     protected void onStart() {
         super.onStart();
         fetchCourses();
+        
     }
 
     private void fetchCourses() {
@@ -124,12 +191,13 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         courses.add(new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username"), ((Number)doc.getLong("capacity")).intValue(), doc.getString("description")));
                     }
-                    courseAdapter.notifyDataSetChanged();
+                    searchCourse(inputName.getText().toString(), inputCode.getText().toString());
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred trying to fetch courses.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
     }
 
     @Override
