@@ -44,6 +44,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     RecyclerView recyclerView;
     CourseAdapter courseAdapter;
     ArrayList<Course> courses = new ArrayList<>();
+    ArrayList<Course> courseSearch;
     Button add;
     Button search;
     EditText inputName;
@@ -61,6 +62,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         courseAdapter = new CourseAdapter(this, courses, this);
         recyclerView.setAdapter(courseAdapter);
 
+
         inputName = findViewById(R.id.course_name);
         inputCode = findViewById(R.id.course_code);
 
@@ -73,6 +75,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
 
     }
+
     private Button createButton(int stringReference){
         Button temp = new Button(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -92,11 +95,39 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             });
         }else{
             params.setMargins(0,0,0,0);
+            temp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    searchCourse(inputName.getText().toString(), inputCode.getText().toString());
+                }
+            });
         }
         temp.setLayoutParams(params);
         btnLayout.addView(temp);
         return temp;
     }
+
+    private void searchCourse(String name, String code){
+        ArrayList<Course> result = new ArrayList<>();
+        for(Course course: courses){
+            if(!code.equals("") && !name.equals("")){
+                if(course.code.equals(code) && course.name.equals(name)){
+                    result.add(course);
+                }
+            }else if(!code.equals("") && name.equals("")){
+                if(course.code.equals(code)){
+                    result.add(course);
+                }
+            }else if(!name.equals("")){
+                if(course.name.equals(name)){
+                    result.add(course);
+                }
+            }
+        }
+        courseAdapter.filterList(result);
+
+    }
+
     public static boolean areFieldsValid(Context context, String name, String code) {
         if(name.isEmpty()) {
             Toast.makeText(context, "Invalid course name.", Toast.LENGTH_SHORT).show();

@@ -69,4 +69,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     public interface onItemClickListener {
         void onItemClick(Course course);
     }
+
+    public void filterList(ArrayList<Course> filteredList){
+        courses = filteredList;
+        notifyDataSetChanged();
+    }
 }
