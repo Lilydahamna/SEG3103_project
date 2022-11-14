@@ -23,10 +23,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserManager extends AppCompatActivity implements UserAdapter.onItemClickListener{
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersRef = db.collection("users");
+    CollectionReference coursesRef = db.collection("courses");
+    CollectionReference scheduleRef = db.collection("course_days");
     RecyclerView recyclerView;
     UserAdapter userAdapter;
     ArrayList<User> users = new ArrayList<>();
@@ -72,17 +76,48 @@ public class UserManager extends AppCompatActivity implements UserAdapter.onItem
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        deleteUser(user.getId());
+                        deleteUser(user);
                     }})
                 .setNegativeButton("Cancel", null).show();
     }
 
-    private void deleteUser(String doc_id) {
+    private void deleteUser(User user) {
+        String doc_id = user.getId();
         usersRef.document(doc_id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(getApplicationContext(), "User successfully deleted!", Toast.LENGTH_SHORT).show();
                 fetchUsers();
+
+                Map<String, Object> course = new HashMap<>();
+                course.put("description", "");
+                course.put("instructor_username", "");
+                course.put("capacity", 0);
+
+                coursesRef.whereEqualTo("instructor_username", user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot course_doc : task.getResult()) {
+                                course_doc.getReference().update(course);
+                                scheduleRef.whereEqualTo("course_id", course_doc.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot event_doc : task.getResult()) {
+                                                event_doc.getReference().delete();
+                                            }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "An error has occurred during cleanup.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "An error has occurred during cleanup.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -39,6 +39,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class CourseManager extends AppCompatActivity implements CourseAdapter.onItemClickListener {
     private SharedPreferences sharedPref;
@@ -47,7 +48,6 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     RecyclerView recyclerView;
     CourseAdapter courseAdapter;
     ArrayList<Course> courses = new ArrayList<>();
-    ArrayList<Course> courseSearch;
     Button add;
     Button search;
     EditText inputName;
@@ -59,12 +59,11 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_manager);
         sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE);
-        recyclerView = findViewById(R.id.courses_list);
-        recyclerView.setHasFixedSize(true);
+        recyclerView = findViewById(R.id.schedule);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         courseAdapter = new CourseAdapter(this, courses, this);
         recyclerView.setAdapter(courseAdapter);
-
 
         inputName = findViewById(R.id.course_name);
         inputCode = findViewById(R.id.course_code);
@@ -113,9 +112,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             }
         });
 
-
     }
-
     private Button createButton(int stringReference){
         Button temp = new Button(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -135,12 +132,6 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             });
         }else{
             params.setMargins(0,0,0,0);
-            temp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchCourse(inputName.getText().toString(), inputCode.getText().toString());
-                }
-            });
         }
         temp.setLayoutParams(params);
         btnLayout.addView(temp);
@@ -198,7 +189,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        courses.add(new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username")));
+                        courses.add(new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username"), ((Number)doc.getLong("capacity")).intValue(), doc.getString("description")));
                     }
                     searchCourse(inputName.getText().toString(), inputCode.getText().toString());
                 } else {
@@ -231,12 +222,12 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     private void instructorPress(Course course) {
         if(sharedPref.getString("username", "").equals(course.getInstructor())) {
-            //TODO: attach all the instructor fields using putExtra so they can be used in the instructor course editor.
             Intent intent = new Intent(getApplicationContext(), CourseEditorInstructor.class);
             intent.putExtra("doc_id", course.getId());
+            intent.putExtra("capacity", course.getCapacity());
+            intent.putExtra("description", course.getDescription());
             startActivity(intent);
-            Toast.makeText(getApplicationContext(), "Enter Course Editor for Instructors.", Toast.LENGTH_SHORT).show();
-        } else if (course.getInstructor() == null) {
+        } else if (course.getInstructor().equals("")) {
             new AlertDialog.Builder(this)
                     .setTitle("Instructor Assignment")
                     .setMessage("Would you like to assign yourself as an instructor for this course?")
@@ -284,6 +275,9 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                     Map<String, Object> course = new HashMap<>();
                     course.put("name", name);
                     course.put("code", code);
+                    course.put("capacity", 0);
+                    course.put("instructor_username", "");
+                    course.put("description", "");
                     if(task.getResult().isEmpty()) { // no course found, can add a new one
                         coursesRef.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
@@ -308,6 +302,5 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             }
         });
     }
-
 
 }
