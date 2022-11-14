@@ -132,6 +132,12 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             });
         }else{
             params.setMargins(0,0,0,0);
+            temp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    searchCourse(inputName.getText().toString(), inputCode.getText().toString());
+                }
+            });
         }
         temp.setLayoutParams(params);
         btnLayout.addView(temp);
