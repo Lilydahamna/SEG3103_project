@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -148,6 +149,9 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     private void searchCourse(String name, String code){
         ArrayList<Course> result = new ArrayList<>();
+        if(name.length() == 0 && code.length() == 0){
+            result = courses;
+        }
         for(Course course: courses){
             if(!code.equals("") && !name.equals("")){
                 if(course.code.equals(code) && course.name.equals(name)){
@@ -184,6 +188,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     protected void onStart() {
         super.onStart();
         fetchCourses();
+        
     }
 
     private void fetchCourses() {
@@ -195,12 +200,13 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         courses.add(new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username")));
                     }
-                    courseAdapter.notifyDataSetChanged();
+                    searchCourse(inputName.getText().toString(), inputCode.getText().toString());
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred trying to fetch courses.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
     }
 
     @Override
