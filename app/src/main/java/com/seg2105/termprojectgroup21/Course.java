@@ -15,7 +15,7 @@ public class Course {
         this.instructor_username = instructor_username;
     }
 
-    // CURRENTLY UNUSED CONSTRUCTORS:
+    // UNUSED CONSTRUCTORS ADDED BY BENJAMIN:
     public Course (String id, String name, String code, String instructor_username, int capacity) {
         this.id = id;
         this.name = name;

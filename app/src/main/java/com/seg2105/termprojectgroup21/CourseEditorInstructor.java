@@ -26,8 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Query.Direction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,7 +159,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
 
     public void addEvent(String doc_id, int day, String start_time, String end_time) {
         // query for event, in case it already exists (in terms of day)
-        scheduleRef.whereEqualTo("day", day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        scheduleRef.whereEqualTo("course_id", doc_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -198,14 +200,12 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
 
     private void fetchSchedule() {
         schedule.clear();
-        scheduleRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        scheduleRef.whereEqualTo("course_id", course_id).orderBy("day", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        if (doc.getId().equals(course_id)) {
-                            schedule.add(new ScheduleItem(doc.getId(), Integer.parseInt(doc.getString("day")), doc.getString("start"), doc.getString("end")));
-                        }
+                        schedule.add(new ScheduleItem(doc.getId(), ((Number)doc.getLong("day")).intValue(), doc.getString("start"), doc.getString("end")));
                     }
                     itemAdapter.notifyDataSetChanged();
                 } else {
@@ -230,7 +230,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
         });
     }
 
-    public void updateCourse(String doc_id, String description, int capacity) {
+    public void updateCourse(String doc_id, String description, int capacity) { // benjamin's
         Map<String, Object> course = new HashMap<>();
         course.put("description", description);
         course.put("capacity", capacity);

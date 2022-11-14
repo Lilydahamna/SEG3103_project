@@ -71,8 +71,6 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         if(sharedPref.getString("role", "").equals("Admin")){
             add = createButton(R.string.add);
         }
-
-
     }
     private Button createButton(int stringReference){
         Button temp = new Button(this);
