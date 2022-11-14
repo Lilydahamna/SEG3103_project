@@ -1,7 +1,11 @@
 package com.seg2105.termprojectgroup21;
 
+import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -20,6 +24,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -58,6 +65,35 @@ public class CourseMethodsTests {
 
     @Test
     public void testAddCourse(){
+        startSize = 0;
+        courseManagerRule.getScenario().onActivity(activity -> {
+
+            coursesRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    startSize = queryDocumentSnapshots.size();
+                    new Thread(() -> {
+                        activity.addCourse("Physics", "PHY2224");
+                        try {
+                            runOnUiThread(()->{
+                                coursesRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        endSize = queryDocumentSnapshots.size();
+                                        assertEquals(startSize+1, endSize);
+                                    }
+                                });
+                            });
+                        } catch (Throwable e) {
+                            System.out.println("could not execute post");
+                        }
+                    }).start();
+                }
+            });
+
+
+
+        });
 
 
     }
