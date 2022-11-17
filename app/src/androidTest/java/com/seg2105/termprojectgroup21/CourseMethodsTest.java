@@ -3,6 +3,7 @@ package com.seg2105.termprojectgroup21;
 import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 
 import androidx.annotation.NonNull;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -76,6 +77,7 @@ public class CourseMethodsTest {
                     }
 
             });
+        courseManagerRule.getScenario().close();
 
 
     }
@@ -99,6 +101,7 @@ public class CourseMethodsTest {
             }
 
         });
+        courseEditorRule.getScenario().close();
 
     }
 
@@ -130,7 +133,7 @@ public class CourseMethodsTest {
             }
 
         });
-
+       courseEditorRule.getScenario().close();
     }
 
     @Test
@@ -149,5 +152,6 @@ public class CourseMethodsTest {
                     CourseManager.areFieldsValid(appContext,"", "code")};
             assertArrayEquals("areFieldsValid test failed!",expectedArray, actualArray);
         });
+        courseManagerRule.getScenario().close();
     }
 }
