@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -77,49 +78,39 @@ public class CourseEditor extends AppCompatActivity {
     }
 
     public void updateCourse(String doc_id, String name, String code) {
-        coursesRef.whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Map<String, Object> course = new HashMap<>();
-                    course.put("name", name);
-                    course.put("code", code);
-                    if(task.getResult().isEmpty() || (task.getResult().size() == 1 && task.getResult().getDocuments().get(0).getId().equals(doc_id))) { // no course found or code unchanged, can add a new one
-                        coursesRef.document(doc_id).update(course).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        // otherwise, inform user that the same course already exists
-                    } else {
-                        Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+        Task<QuerySnapshot> task = coursesRef.whereEqualTo("code", code).get();
+        while(!task.isComplete());
+        if(task.isSuccessful()){
+            Map<String, Object> course = new HashMap<>();
+            course.put("name", name);
+            course.put("code", code);
+            if(task.getResult().isEmpty() || (task.getResult().size() == 1 && task.getResult().getDocuments().get(0).getId().equals(doc_id))) { // no course found or code unchanged, can add a new one
+                Task<Void> newTask = coursesRef.document(doc_id).update(course);
+                while(!newTask.isComplete());
+                if(newTask.isSuccessful()){
+                    Toast.makeText(getApplicationContext(), "Course updated.", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Toast.makeText(getApplicationContext(), "Error updating course.", Toast.LENGTH_SHORT).show();
                 }
+                // otherwise, inform user that the same course already exists
+            } else {
+                Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
             }
-        });
+        }else {
+            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void removeCourse(String doc_id) {
         // query database for course
-        coursesRef.document(doc_id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getApplicationContext(), "Course successfully deleted!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Error deleting course!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        Task<Void> task = coursesRef.document(doc_id).delete();
+        while(!task.isComplete());
+        if(task.isSuccessful()){
+            Toast.makeText(getApplicationContext(), "Course successfully deleted!", Toast.LENGTH_SHORT).show();
+            finish();
+        }else{
+            Toast.makeText(getApplicationContext(), "Error deleting course!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

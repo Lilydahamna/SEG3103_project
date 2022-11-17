@@ -1,11 +1,13 @@
 package com.seg2105.termprojectgroup21;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +39,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 public class CourseManager extends AppCompatActivity implements CourseAdapter.onItemClickListener {
     private SharedPreferences sharedPref;
@@ -182,12 +185,13 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     protected void onStart() {
         super.onStart();
         fetchCourses();
-        
+
     }
 
-    private void fetchCourses() {
+    private void fetchCourses()  {
         courses.clear();
-        Task<?> fetchTask = coursesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<QuerySnapshot> task = coursesRef.get();
+        /*.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -199,9 +203,17 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                     Toast.makeText(getApplicationContext(), "An error has occurred trying to fetch courses.", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-
-        while(!fetchTask.isComplete());
+        });*/
+        while(!task.isComplete());
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot doc : task.getResult()) {
+                courses.add(new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username"), ((Number)doc.getLong("capacity")).intValue(), doc.getString("description")));
+            }
+            searchCourse(inputName.getText().toString(), inputCode.getText().toString());
+        } else {
+            Toast.makeText(getApplicationContext(), "An error has occurred trying to fetch courses.", Toast.LENGTH_SHORT).show();
+        }
+        //while(!fetchTask.isComplete());
     }
 
     @Override
@@ -273,42 +285,36 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     }
 
     public void addCourse(String name, String code) {
-        // query for course, in case it already exists
-        Task<?> addTask = coursesRef.whereEqualTo("code", code).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Map<String, Object> course = new HashMap<>();
-                    course.put("name", name);
-                    course.put("code", code);
-                    course.put("capacity", 0);
-                    course.put("instructor_username", "");
-                    course.put("description", "");
-                    if(task.getResult().isEmpty()) { // no course found, can add a new one
-                        coursesRef.add(course).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
-                                clearFields();
-                                fetchCourses();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        // otherwise, inform user that the same course already exists
-                    } else {
-                        Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-                }
+        boolean exists = false;
+        for(Course course: courses){
+            if(course.getCode().equals(code)){
+                exists = true;
+                break;
             }
-        });
+        }
+        if(!exists) {
+            Map<String, Object> course = new HashMap<>();
+            course.put("name", name);
+            course.put("code", code);
+            course.put("capacity", 0);
+            course.put("instructor_username", "");
+            course.put("description", "");
+            Task<DocumentReference> addTask = coursesRef.add(course);
+            //could cause deadlock
+            while (!addTask.isComplete()) ;
 
-        while(!addTask.isComplete());
+            if (addTask.isSuccessful()) {
+                Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
+                clearFields();
+                fetchCourses();
+            } else {
+                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+
+            }
+        }else{
+            Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }
