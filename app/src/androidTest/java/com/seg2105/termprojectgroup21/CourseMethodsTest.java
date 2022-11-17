@@ -41,13 +41,6 @@ import java.util.ArrayList;
 public class CourseMethodsTest {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference coursesRef = db.collection("courses");
-
-    @Rule
-    public ActivityScenarioRule<CourseManager> courseManagerRule = new ActivityScenarioRule<>(
-            CourseManager.class);
-    @Rule
-    public ActivityScenarioRule<CourseEditor> courseEditorRule = new ActivityScenarioRule<>(
-            CourseEditor.class);
     int startSize, endSize;
 
     @Test
@@ -55,7 +48,8 @@ public class CourseMethodsTest {
         Task<QuerySnapshot> task = coursesRef.get();
         while(!task.isComplete());
         startSize = task.getResult().size();
-        courseManagerRule.getScenario().onActivity(activity -> {
+        ActivityScenario<CourseManager> courseManagerScenario = ActivityScenario.launch(CourseManager.class);
+        courseManagerScenario.onActivity(activity -> {
 
                     activity.addCourse("Physics", "PHY1001");
 
@@ -77,14 +71,16 @@ public class CourseMethodsTest {
                     }
 
             });
-        courseManagerRule.getScenario().close();
+        courseManagerScenario.close();
 
 
     }
 
     @Test
     public void B_testUpdateCourse(){
-        courseEditorRule.getScenario().onActivity(activity -> {
+        ActivityScenario<CourseEditor> courseEditorScenario = ActivityScenario.launch(CourseEditor.class);
+
+        courseEditorScenario.onActivity(activity -> {
             Task<QuerySnapshot> task = coursesRef.whereEqualTo("name", "Physics").whereEqualTo("code","PHY1004").get();
             while(!task.isComplete());
             if(!task.getResult().isEmpty()){
@@ -101,7 +97,7 @@ public class CourseMethodsTest {
             }
 
         });
-        courseEditorRule.getScenario().close();
+        courseEditorScenario.close();
 
     }
 
@@ -110,7 +106,10 @@ public class CourseMethodsTest {
        Task<QuerySnapshot> getTask = coursesRef.get();
        while(!getTask.isComplete());
        startSize = getTask.getResult().size();
-        courseEditorRule.getScenario().onActivity(activity -> {
+
+       ActivityScenario<CourseEditor> courseEditorScenario = ActivityScenario.launch(CourseEditor.class);
+
+       courseEditorScenario.onActivity(activity -> {
             Task<QuerySnapshot> task = coursesRef.whereEqualTo("name", "Physics").get();
             while(!task.isComplete());
             int physicsCourses = task.getResult().size();
@@ -133,13 +132,15 @@ public class CourseMethodsTest {
             }
 
         });
-       courseEditorRule.getScenario().close();
+       courseEditorScenario.close();
     }
 
     @Test
     public void D_testAreFieldsValid() {
 
-        courseManagerRule.getScenario().onActivity(activity -> {
+        ActivityScenario<CourseManager> courseManagerScenario = ActivityScenario.launch(CourseManager.class);
+
+        courseManagerScenario.onActivity(activity -> {
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             boolean[] expectedArray = {false, false, false, false, true, false, false, false};
             boolean[] actualArray = {CourseManager.areFieldsValid(appContext,"", ""),
@@ -152,6 +153,6 @@ public class CourseMethodsTest {
                     CourseManager.areFieldsValid(appContext,"", "code")};
             assertArrayEquals("areFieldsValid test failed!",expectedArray, actualArray);
         });
-        courseManagerRule.getScenario().close();
+        courseManagerScenario.close();
     }
 }
