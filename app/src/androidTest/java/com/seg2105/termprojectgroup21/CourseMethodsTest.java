@@ -9,9 +9,11 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.*;
 
@@ -33,6 +35,7 @@ import java.util.ArrayList;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class CourseMethodsTest {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -47,7 +50,7 @@ public class CourseMethodsTest {
     int startSize, endSize;
 
     @Test
-    public void testAddCourse() {
+    public void A_testAddCourse() {
         Task<QuerySnapshot> task = coursesRef.get();
         while(!task.isComplete());
         startSize = task.getResult().size();
@@ -78,7 +81,7 @@ public class CourseMethodsTest {
     }
 
     @Test
-    public void testUpdateCourse(){
+    public void B_testUpdateCourse(){
         courseEditorRule.getScenario().onActivity(activity -> {
             Task<QuerySnapshot> task = coursesRef.whereEqualTo("name", "Physics").whereEqualTo("code","PHY1004").get();
             while(!task.isComplete());
@@ -100,7 +103,7 @@ public class CourseMethodsTest {
     }
 
    @Test
-    public void testRemoveCourse(){
+    public void C_testRemoveCourse(){
        Task<QuerySnapshot> getTask = coursesRef.get();
        while(!getTask.isComplete());
        startSize = getTask.getResult().size();
@@ -131,7 +134,7 @@ public class CourseMethodsTest {
     }
 
     @Test
-    public void testAreFieldsValid() {
+    public void D_testAreFieldsValid() {
 
         courseManagerRule.getScenario().onActivity(activity -> {
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
