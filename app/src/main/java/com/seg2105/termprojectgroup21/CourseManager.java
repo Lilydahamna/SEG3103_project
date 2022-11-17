@@ -300,7 +300,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             course.put("instructor_username", "");
             course.put("description", "");
             Task<DocumentReference> addTask = coursesRef.add(course);
-            //could cause deadlock
+
             while (!addTask.isComplete()) ;
 
             if (addTask.isSuccessful()) {

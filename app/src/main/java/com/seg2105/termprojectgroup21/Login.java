@@ -14,10 +14,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
 import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -53,7 +56,10 @@ public class Login extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerUser();
+                String name = username_field.getText().toString();
+                String enteredPassword = password_field.getText().toString();
+                String selectedRole = role_field.getSelectedItem().toString();
+                registerUser(name, enteredPassword, selectedRole);
             }
         });
         login.setOnClickListener(new View.OnClickListener() {
@@ -62,10 +68,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    public void registerUser() {
-        String username = username_field.getText().toString();
-        String password = password_field.getText().toString();
-        String role = role_field.getSelectedItem().toString();
+    public void registerUser(String username, String password, String role) {
 
         //Validate fields (can be expanded later)
         if(username.equals("") || password.equals("")) {
@@ -73,23 +76,28 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        //Query for username
-        usersRef.whereEqualTo("username", username).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                //If no entries exist, register. Otherwise do not.
-                if(task.getResult().isEmpty()) {
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("username", username);
-                    user.put("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString());
-                    user.put("role", role);
-                    usersRef.add(user).addOnSuccessListener(documentReference -> Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show());
-                } else {
-                    Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
+        Task<QuerySnapshot> task = usersRef.whereEqualTo("username", username).get();
+        while(!task.isComplete());
+        if(task.isSuccessful()){
+            if(task.getResult().isEmpty()) {
+                Map<String, Object> user = new HashMap<>();
+                user.put("username", username);
+                user.put("password", Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString());
+                user.put("role", role);
+                Task<DocumentReference> addTask = usersRef.add(user);
+                while(!addTask.isComplete());
+                if(addTask.isSuccessful()){
+                    Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Username already exists.", Toast.LENGTH_SHORT).show();
             }
-        });
+        }else{
+            Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void loginUser() {
