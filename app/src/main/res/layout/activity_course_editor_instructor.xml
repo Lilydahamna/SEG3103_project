@@ -177,36 +177,50 @@ tools:context=".CourseEditorInstructor">
             android:fadeScrollbars="true"
             android:scrollbars="vertical"
             tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="1dp" />
+            tools:layout_editor_absoluteY="1dp" >
+
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
 </LinearLayout>
 
-<LinearLayout
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:orientation="horizontal"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/Unassign"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="@string/un_assign" />
+
+        <Button
+            android:id="@+id/EditCourse"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:text="@string/update" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/Unassign"
-        android:layout_width="match_parent"
+        android:id="@+id/view_students"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="4dp"
-        android:layout_weight="1"
-        android:text="@string/un_assign" />
-
-    <Button
-        android:id="@+id/EditCourse"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginStart="4dp"
-        android:layout_weight="1"
-        android:text="@string/update" />
-</LinearLayout>
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/view_students"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

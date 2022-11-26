@@ -9,13 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,7 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Query.Direction;
+import com.seg2105.termprojectgroup21.Adapters.ScheduleItemAdapter;
+import com.seg2105.termprojectgroup21.Objects.ScheduleItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
     String course_id, course_description;
     EditText description, capacity, start_time, end_time;
     int course_capacity;
-    Button unassign, edit;
+    Button unassign, edit, view_students;
     Spinner day_picker;
 
     //private SharedPreferences sharedPref;
@@ -84,6 +83,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
 
         unassign = findViewById(R.id.Unassign);
         edit = findViewById(R.id.EditCourse);
+        view_students = findViewById(R.id.view_students);
 
         unassign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +91,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
                 unassignConfirm();
             }
         });
+
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +112,15 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
                         break;
                 }
                 if (areEventFieldsValid(getApplicationContext(), start_time.getText().toString(), end_time.getText().toString())) addEvent(course_id, day, start_time.getText().toString(), end_time.getText().toString());
+            }
+        });
+
+        view_students.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), StudentViewer.class);
+                intent.putExtra("course_id", course_id);
+                startActivity(intent);
             }
         });
     }

@@ -1,13 +1,11 @@
 package com.seg2105.termprojectgroup21;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +20,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -32,14 +29,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-
+import com.seg2105.termprojectgroup21.Adapters.CourseAdapter;
+import com.seg2105.termprojectgroup21.Objects.Course;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 public class CourseManager extends AppCompatActivity implements CourseAdapter.onItemClickListener {
     private SharedPreferences sharedPref;
@@ -48,10 +44,8 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     RecyclerView recyclerView;
     CourseAdapter courseAdapter;
     ArrayList<Course> courses = new ArrayList<>();
-    Button add;
-    Button search;
-    EditText inputName;
-    EditText inputCode;
+    Button add, search;
+    EditText inputName, inputCode;
     LinearLayout btnLayout;
 
     @Override
@@ -151,15 +145,15 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         }
         for(Course course: courses){
             if(!code.equals("") && !name.equals("")){
-                if(course.code.equals(code) && course.name.equals(name)){
+                if(course.getCode().equals(code) && course.getName().equals(name)){
                     result.add(course);
                 }
             }else if(!code.equals("") && name.equals("")){
-                if(course.code.equals(code)){
+                if(course.getCode().equals(code)){
                     result.add(course);
                 }
             }else if(!name.equals("")){
-                if(course.name.equals(name)){
+                if(course.getName().equals(name)){
                     result.add(course);
                 }
             }

@@ -1,4 +1,4 @@
-package com.seg2105.termprojectgroup21;
+package com.seg2105.termprojectgroup21.Objects;
 
 import java.util.List;
 import java.util.ArrayList;

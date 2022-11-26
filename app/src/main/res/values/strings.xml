@@ -18,6 +18,14 @@
         <item>Thursday</item>
         <item>Friday</item>
     </string-array>
+    <string-array name="days_extended">
+        <item>Any</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+    </string-array>
     <string name="courses">Courses</string>
     <string name="users">Users</string>
     <string name="role">Role:</string>
@@ -26,6 +34,7 @@
     <string name="username_item">Username:</string>
     <string name="delete">Delete</string>
 
+    <string name="course_viewer_title">View Courses</string>
     <string name="course_manager_title">Course Manager</string>
     <string name="user_manager_title">User Manager</string>
 
@@ -64,4 +73,10 @@
 
     <string name="day_temp">Monday</string>
     <string name="time_temp">00:00</string>
+    <string name="view_students">View Students</string>
+    <string name="enroll">Enroll</string>
+    <string name="unenroll">Un-enroll</string>
+    <string name="my_courses">My Courses</string>
+    <string name="togglebutton">ToggleButton</string>
+    <string name="all_courses">All Courses</string>
 </resources>

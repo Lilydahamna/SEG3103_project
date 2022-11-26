@@ -1,4 +1,4 @@
-package com.seg2105.termprojectgroup21;
+package com.seg2105.termprojectgroup21.Adapters;
 
 
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.seg2105.termprojectgroup21.Objects.Course;
+import com.seg2105.termprojectgroup21.R;
 
 import java.util.ArrayList;
 

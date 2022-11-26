@@ -1,16 +1,17 @@
-package com.seg2105.termprojectgroup21;
+package com.seg2105.termprojectgroup21.Adapters;
 
 
 import android.content.Context;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.seg2105.termprojectgroup21.R;
+import com.seg2105.termprojectgroup21.Objects.User;
 
 import java.util.ArrayList;
 
