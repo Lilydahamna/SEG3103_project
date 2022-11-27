@@ -141,7 +141,6 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
 
     private void searchCourse(String name, String code){
 
-        //improve search functionality
         ArrayList<Course> result = new ArrayList<>();
         if(name.length() == 0 && code.length() == 0){
             result = courses;
