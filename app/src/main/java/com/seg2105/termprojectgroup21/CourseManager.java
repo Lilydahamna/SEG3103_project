@@ -35,6 +35,7 @@ import com.seg2105.termprojectgroup21.Objects.Course;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class CourseManager extends AppCompatActivity implements CourseAdapter.onItemClickListener {
@@ -139,21 +140,27 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
     }
 
     private void searchCourse(String name, String code){
+
+        //improve search functionality
         ArrayList<Course> result = new ArrayList<>();
         if(name.length() == 0 && code.length() == 0){
             result = courses;
         }
+        name = name.toLowerCase();
+        code = code.toLowerCase();
         for(Course course: courses){
+            String courseCode = course.getCode().toLowerCase();
+            String courseName = course.getName().toLowerCase();
             if(!code.equals("") && !name.equals("")){
-                if(course.getCode().equals(code) && course.getName().equals(name)){
+                if(courseCode.contains(code) && courseName.contains(name)){
                     result.add(course);
                 }
-            }else if(!code.equals("") && name.equals("")){
-                if(course.getCode().equals(code)){
+            }else if(!code.equals("")){
+                if(courseCode.contains(code)){
                     result.add(course);
                 }
             }else if(!name.equals("")){
-                if(course.getName().equals(name)){
+                if(courseName.contains(name)){
                     result.add(course);
                 }
             }
