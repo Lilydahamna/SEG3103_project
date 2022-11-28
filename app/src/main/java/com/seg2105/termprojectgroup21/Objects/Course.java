@@ -30,6 +30,7 @@ public class Course {
     }
 
     public String getInstructor() { return instructor_username; }
+
     public String getDescription() { return description; }
 
     public int getCapacity() { return capacity; }

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,16 +40,27 @@ public class CourseDetails extends AppCompatActivity {
     Button enrollToggle;
     Boolean isEnrolled = false;
     Course course;
+    TextView courseName;
+    TextView couseDescription;
+    TextView courseCapacity;
+    TextView courseInstructor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_details);
+
+        courseName = findViewById(R.id.courseName);
+        couseDescription = findViewById(R.id.courseDescription);
+        courseCapacity = findViewById(R.id.courseCapacity);
+        courseInstructor = findViewById(R.id.courseInstructor);
+
         sharedPref = getSharedPreferences("user",Context.MODE_PRIVATE);
         intent = getIntent();
         enrollToggle = findViewById(R.id.enrollToggle);
         checkEnrollment();
         getCourseData();
-        //TODO: Finish UI and populate all course details (Can pass a good amount of them through intent) but have to fetch course days/hours (see CourseEditorInstructor) and enrollment total
+
         if (!sharedPref.getString("role", "").equals("Student")) enrollToggle.setVisibility(View.INVISIBLE);
         enrollToggle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,13 +73,19 @@ public class CourseDetails extends AppCompatActivity {
     }
 
     private void getCourseData() {
-        courseRef.document(intent.getStringExtra("course_id")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Task<?> task = courseRef.document(intent.getStringExtra("course_id")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot doc = task.getResult();
                 course = new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username"), ((Number)doc.getLong("capacity")).intValue(), doc.getString("description"));
+                courseName.setText(course.getName());
+                couseDescription.setText(course.getDescription());
+                courseCapacity.setText(Integer.toString(course.getCapacity()));
+                courseInstructor.setText(course.getInstructor());
             }
         });
+
+        while(!task.isComplete());
     }
 
     private void checkEnrollment() {

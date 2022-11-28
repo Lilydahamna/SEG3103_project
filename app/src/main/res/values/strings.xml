@@ -55,6 +55,7 @@
     <string name="update">Update</string>
     <string name="basic_details">Basic Details</string>
     <string name="instructor">Instructor:</string>
+    <string name="instructor_temp">Instructor</string>
     <string name="user123">User123</string>
     <string name="un_assign">Un-Assign</string>
     <string name="description">Description</string>
@@ -64,6 +65,7 @@
     <string name="of_students"># of Students</string>
 
     <string name="schedule_item">Add Schedule Item:</string>
+    <string name="schedule_title">Schedule:</string>
     <string name="day">Day:</string>
     <string name="start_time">Start Time:</string>
     <string name="end_time">End Time:</string>
@@ -82,4 +84,5 @@
 
     <string name="student_temp">John Smith</string>
     <string name="class_capacity_temp">Capacity: 0/0</string>
+
 </resources>
