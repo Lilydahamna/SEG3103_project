@@ -30,6 +30,7 @@ public class UserManager extends AppCompatActivity implements UserAdapter.onItem
     CollectionReference usersRef = db.collection("users");
     CollectionReference coursesRef = db.collection("courses");
     CollectionReference scheduleRef = db.collection("course_days");
+    CollectionReference enrollmentRef = db.collection("enrollment");
     RecyclerView recyclerView;
     UserAdapter userAdapter;
     ArrayList<User> users = new ArrayList<>();
@@ -87,12 +88,21 @@ public class UserManager extends AppCompatActivity implements UserAdapter.onItem
             public void onSuccess(Void unused) {
                 Toast.makeText(getApplicationContext(), "User successfully deleted!", Toast.LENGTH_SHORT).show();
                 fetchUsers();
+                //Cleanup enrollment
+                enrollmentRef.whereEqualTo("student_username", user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            doc.getReference().delete();
+                        }
+                    }
+                });
 
+                //Cleanup assigned courses
                 Map<String, Object> course = new HashMap<>();
                 course.put("description", "");
                 course.put("instructor_username", "");
                 course.put("capacity", 0);
-
                 coursesRef.whereEqualTo("instructor_username", user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
