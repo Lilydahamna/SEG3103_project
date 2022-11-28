@@ -81,4 +81,5 @@
     <string name="all_courses">All Courses</string>
 
     <string name="student_temp">John Smith</string>
+    <string name="class_capacity_temp">Capacity: 0/0</string>
 </resources>

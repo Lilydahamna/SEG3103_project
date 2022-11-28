@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,9 +26,13 @@ public class StudentViewer extends AppCompatActivity {
     Intent intent;
 
     RecyclerView recyclerView;
+    TextView textView;
     StudentAdapter studentAdapter;
 
     ArrayList<String> students = new ArrayList<>();
+    String course_capacity;
+    // hacky way to allow studentNum to be incremented inside getStudents():
+    int studentNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,28 +41,36 @@ public class StudentViewer extends AppCompatActivity {
         intent = getIntent();
 
         recyclerView = findViewById(R.id.students_view);
+        textView = findViewById(R.id.class_capacity);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         studentAdapter = new StudentAdapter(this, students);
         recyclerView.setAdapter(studentAdapter);
         getStudents();
+        System.out.println("onCreate() studentNum: " + studentNum);
+        course_capacity = "Capacity: " + studentNum + "/" + intent.getIntExtra("course_capacity", 0);
+        textView.setText(course_capacity);
     }
 
-    private void getStudents() {
+    protected void getStudents() {
         students.clear();
         enrollmentRef.whereEqualTo("course_id", intent.getStringExtra("course_id")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                studentNum = task.getResult().size();
+                System.out.println("onComplete() studentNum: " + studentNum);
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         students.add(doc.getString("student_username"));
                         studentAdapter.notifyDataSetChanged();
                         Toast.makeText(getApplicationContext(), "Students updated successfully.", Toast.LENGTH_SHORT).show();
                     }
+
                 } else {
                     Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        System.out.println("end of getStudents() studentNum: " + studentNum);
     }
 }

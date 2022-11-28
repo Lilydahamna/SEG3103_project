@@ -120,6 +120,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), StudentViewer.class);
                 intent.putExtra("course_id", course_id);
+                intent.putExtra("course_capacity", course_capacity);
                 startActivity(intent);
             }
         });
