@@ -281,6 +281,9 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
                                 doc.getReference().delete();
                             }
                             Toast.makeText(getApplicationContext(), "Unassigned successfully.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), CourseDetails.class);
+                            intent.putExtra("course_id", course_id);
+                            startActivity(intent);
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Error unassigning.", Toast.LENGTH_SHORT).show();

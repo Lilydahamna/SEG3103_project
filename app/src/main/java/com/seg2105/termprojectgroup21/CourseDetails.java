@@ -19,9 +19,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.seg2105.termprojectgroup21.Objects.Course;
 import com.seg2105.termprojectgroup21.Objects.User;
 
 import java.util.HashMap;
@@ -30,11 +32,13 @@ import java.util.Map;
 public class CourseDetails extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference enrollmentRef = db.collection("enrollment");
+    CollectionReference courseRef = db.collection("courses");
     DocumentReference enrollmentDoc;
     SharedPreferences sharedPref;
     Intent intent;
     Button enrollToggle;
     Boolean isEnrolled = false;
+    Course course;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,15 +47,25 @@ public class CourseDetails extends AppCompatActivity {
         intent = getIntent();
         enrollToggle = findViewById(R.id.enrollToggle);
         checkEnrollment();
-
+        getCourseData();
         //TODO: Finish UI and populate all course details (Can pass a good amount of them through intent) but have to fetch course days/hours (see CourseEditorInstructor) and enrollment total
-
+        if (!sharedPref.getString("role", "").equals("Student")) enrollToggle.setVisibility(View.INVISIBLE);
         enrollToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(isEnrolled) unenroll();
                 //TODO: Add verification for course capacity and time conflict (both of which should be stored somehow as they are displayed)
                 else if (true /* verification condition */) enroll();
+            }
+        });
+    }
+
+    private void getCourseData() {
+        courseRef.document(intent.getStringExtra("course_id")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+                course = new Course(doc.getId(), doc.getString("name"), doc.getString("code"), doc.getString("instructor_username"), ((Number)doc.getLong("capacity")).intValue(), doc.getString("description"));
             }
         });
     }

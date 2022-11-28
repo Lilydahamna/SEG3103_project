@@ -254,11 +254,9 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                         }})
                     .setNegativeButton("No", null).show();
         } else {
-            new AlertDialog.Builder(this)
-                    .setTitle("Instructor Assignment")
-                    .setMessage("There is already an instructor assigned to this course.")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton("Ok", null).show();
+            Intent intent = new Intent(getApplicationContext(), CourseDetails.class);
+            intent.putExtra("course_id", course.getId());
+            startActivity(intent);
         }
     }
 
