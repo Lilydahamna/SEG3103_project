@@ -31,8 +31,6 @@ public class StudentViewer extends AppCompatActivity {
 
     ArrayList<String> students = new ArrayList<>();
     String course_capacity;
-    // hacky way to allow studentNum to be incremented inside getStudents():
-    int studentNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +44,9 @@ public class StudentViewer extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         studentAdapter = new StudentAdapter(this, students);
         recyclerView.setAdapter(studentAdapter);
-        getStudents();
-        System.out.println("onCreate() studentNum: " + studentNum);
-        course_capacity = "Capacity: " + studentNum + "/" + intent.getIntExtra("course_capacity", 0);
+        course_capacity = "Capacity: 0/" + intent.getIntExtra("course_capacity", 0);
         textView.setText(course_capacity);
+        getStudents();
     }
 
     protected void getStudents() {
@@ -57,8 +54,8 @@ public class StudentViewer extends AppCompatActivity {
         enrollmentRef.whereEqualTo("course_id", intent.getStringExtra("course_id")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                studentNum = task.getResult().size();
-                System.out.println("onComplete() studentNum: " + studentNum);
+                course_capacity = "Capacity: " + task.getResult().size() + "/" + intent.getIntExtra("course_capacity", 0);
+                textView.setText(course_capacity);
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         students.add(doc.getString("student_username"));
@@ -71,6 +68,5 @@ public class StudentViewer extends AppCompatActivity {
                 }
             }
         });
-        System.out.println("end of getStudents() studentNum: " + studentNum);
     }
 }
