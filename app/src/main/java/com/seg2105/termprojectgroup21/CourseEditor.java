@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -28,6 +29,8 @@ public class CourseEditor extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference coursesRef = db.collection("courses");
+    CollectionReference enrollmentRef = db.collection("enrollment");
+    CollectionReference scheduleRef = db.collection("course_days");
 
     Intent intent;
     String course_id;
@@ -108,6 +111,32 @@ public class CourseEditor extends AppCompatActivity {
         while(!task.isComplete());
         if(task.isSuccessful()){
             Toast.makeText(getApplicationContext(), "Course successfully deleted!", Toast.LENGTH_SHORT).show();
+            //Clean course days and enrollement
+            enrollmentRef.whereEqualTo("course_id", doc_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            doc.getReference().delete();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "An error has occurred during enrollement cleanup.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            scheduleRef.whereEqualTo("course_id", doc_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            doc.getReference().delete();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "An error has occurred during schedule cleanup.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             finish();
         }else{
             Toast.makeText(getApplicationContext(), "Error deleting course!", Toast.LENGTH_SHORT).show();
