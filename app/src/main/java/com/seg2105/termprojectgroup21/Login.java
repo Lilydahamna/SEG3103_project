@@ -56,22 +56,30 @@ public class Login extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = username_field.getText().toString();
-                String enteredPassword = password_field.getText().toString();
-                String selectedRole = role_field.getSelectedItem().toString();
-                registerUser(name, enteredPassword, selectedRole);
+                String username = username_field.getText().toString().trim();
+                String password = password_field.getText().toString().trim();
+                String role = role_field.getSelectedItem().toString();
+                registerUser(username, password, role);
             }
         });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { loginUser(); }
+            public void onClick(View view) {
+                String username = username_field.getText().toString().trim();
+                String password = password_field.getText().toString().trim();
+                loginUser(username, password);
+            }
         });
+    }
+
+    public boolean properCredentials(String username, String password) {
+        //Validate fields (can be expanded later)
+        return !username.equals("") && !password.equals("");
     }
 
     public void registerUser(String username, String password, String role) {
 
-        //Validate fields (can be expanded later)
-        if(username.equals("") || password.equals("")) {
+        if(!properCredentials(username, password)) {
             Toast.makeText(getApplicationContext(), "Please enter a valid username/password.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -100,12 +108,9 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    public void loginUser() {
-        String username = username_field.getText().toString();
-        String password = password_field.getText().toString();
+    public void loginUser(String username, String password) {
 
-        //Validate fields (can be expanded later)
-        if(username.equals("") || password.equals("")) {
+        if(!properCredentials(username, password)) {
             Toast.makeText(getApplicationContext(), "Please enter a valid username/password.", Toast.LENGTH_SHORT).show();
             return;
         }
