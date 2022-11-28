@@ -79,4 +79,6 @@
     <string name="my_courses">My Courses</string>
     <string name="togglebutton">ToggleButton</string>
     <string name="all_courses">All Courses</string>
+
+    <string name="student_temp">John Smith</string>
 </resources>
