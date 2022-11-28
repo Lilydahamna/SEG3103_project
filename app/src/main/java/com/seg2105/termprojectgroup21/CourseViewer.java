@@ -33,6 +33,7 @@ import com.seg2105.termprojectgroup21.Objects.ScheduleItem;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class CourseViewer extends AppCompatActivity implements CourseAdapter.onItemClickListener {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -140,7 +141,7 @@ public class CourseViewer extends AppCompatActivity implements CourseAdapter.onI
         ArrayList<Course> filteredCourses = new ArrayList<>();
 
         //contains IDs of courses that match enrolment status
-        ArrayList<String> coursesEnrolled = new ArrayList<>();
+        HashSet<String> coursesEnrolled = new HashSet<>();
 
         name = name.toLowerCase();
         code = code.toLowerCase();
@@ -165,22 +166,19 @@ public class CourseViewer extends AppCompatActivity implements CourseAdapter.onI
             if(task.isSuccessful()){
 
                 for (QueryDocumentSnapshot doc : task.getResult()) {
-                    coursesEnrolled.add(doc.getString("course_id"));
+                    if(day == -1){
+                        coursesEnrolled.add(doc.getString("course_id"));
+                    }else{
+                        if(searchDay.contains(doc.getString("course_id"))){
+                            coursesEnrolled.add(doc.getString("course_id"));
+                        }
+                    }
                 }
 
             }else{
                 Toast.makeText(getApplicationContext(), "An error has occurred trying to fetch courses student enrolled in.", Toast.LENGTH_SHORT).show();
             }
 
-            if(day != -1){
-                for(String courseID: coursesEnrolled){
-                    if(!searchDay.contains(courseID)){
-                        coursesEnrolled.remove(courseID);
-                    }
-                }
-                Toast.makeText(getApplicationContext(), "finished", Toast.LENGTH_SHORT).show();
-
-            }
 
         }
 
@@ -193,12 +191,9 @@ public class CourseViewer extends AppCompatActivity implements CourseAdapter.onI
                 }
             }
         }else{
-            for(String courseID: coursesEnrolled){
-                for(Course course: courses){
-                    if (course.getId().equals(courseID)){
-                        filteredCourses.add(course);
-
-                    }
+            for(Course course: courses){
+                if(coursesEnrolled.contains(course.getId())){
+                    filteredCourses.add(course);
                 }
             }
         }
