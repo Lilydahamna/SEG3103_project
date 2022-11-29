@@ -83,7 +83,7 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
         enrollToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEnrolled) {unenroll();}
+                if(isEnrolled) {unenrollDialog();}
                 else enroll(sharedPref.getString("username", ""));
             }
         });
@@ -245,25 +245,28 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
     }
 
     public void unenroll() {
+        Task<Void> task = enrollmentDoc.delete();
+        while(!task.isComplete());
+        if(task.isSuccessful()){
+            isEnrolled = false;
+            enrollToggle.setText(R.string.enroll);
+            enrollmentDoc = null;
+            Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "Could not un-enroll due to error.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    public void unenrollDialog(){
         new AlertDialog.Builder(this)
                 .setTitle("Un-enrollment")
                 .setMessage("Are you sure you want to un-enroll from this course?")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton("Un-enroll", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Task<Void> task = enrollmentDoc.delete();
-                        while(!task.isComplete());
-                        if(task.isSuccessful()){
-                            isEnrolled = false;
-                            enrollToggle.setText(R.string.enroll);
-                            enrollmentDoc = null;
-                            Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Could not un-enroll due to error.", Toast.LENGTH_SHORT).show();
-                        }
+                        unenroll();
                     }})
                 .setNegativeButton("Cancel", null).show();
-
     }
 
     private void fetchSchedule() {
