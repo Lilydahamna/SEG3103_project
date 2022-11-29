@@ -34,6 +34,7 @@ import com.seg2105.termprojectgroup21.Objects.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class CourseDetails extends AppCompatActivity implements ScheduleItemAdapter.onItemClickListener {
@@ -93,10 +94,102 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
                             }})
                             .setNegativeButton("Cancel", null).show();
                 }
-                //TODO: Add verification for course capacity and time conflict (both of which should be stored somehow as they are displayed)
-                else if (true /* verification condition */) enroll(sharedPref.getString("username", ""));
+                else if (verifyEnroll()) enroll(sharedPref.getString("username", ""));
             }
         });
+    }
+
+    private boolean verifyEnroll(){
+        String courseID = intent.getStringExtra("course_id");
+        //get capacity
+        Task<DocumentSnapshot> task = courseRef.document(courseID).get();
+        int capacity = 0;
+        while(!task.isComplete());
+        if(task.isSuccessful()){
+            capacity = ((Number)task.getResult().getLong("capacity")).intValue();
+            if(capacity == 0){
+                Toast.makeText(getApplicationContext(), "This course is not open for enrollment yet!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }else{
+            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //current students enrolled in course
+        Task <QuerySnapshot> task2 = enrollmentRef.get();
+        while(!task2.isComplete());
+        HashSet<String> courseIDs = new HashSet<>();
+        if(task2.isSuccessful()){
+            //number of students registered in course
+            int counter = 0;
+            for(DocumentSnapshot doc : task2.getResult()){
+                if(doc.getString("course_id").equals(courseID)){
+                    counter++;
+                }
+                //store ids of courses where student already enrolled
+                if(doc.getString("student_username").equals(sharedPref.getString("username", ""))){
+                    courseIDs.add(doc.getString("course_id"));
+                }
+            }
+            if(counter == capacity){
+                Toast.makeText(getApplicationContext(), "This course is full!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }else{
+            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        Task<QuerySnapshot> task3 = scheduleRef.get();
+        while(!task3.isComplete());
+        ArrayList<ScheduleItem> schedules = new ArrayList<>();
+        ScheduleItem courseSchedule = null;
+        if(task3.isSuccessful()){
+            for(DocumentSnapshot doc: task3.getResult()){
+                if(courseIDs.contains(doc.getString("course_id"))){
+                    schedules.add(new ScheduleItem(doc.getId(), ((Number)doc.getLong("day")).intValue(), doc.getString("start"), doc.getString("end")));
+                }
+                if(courseID.equals(doc.getString("course_id"))){
+                    courseSchedule = new ScheduleItem(doc.getId(), ((Number)doc.getLong("day")).intValue(), doc.getString("start"), doc.getString("end"));
+                }
+            }
+        }else{
+            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(courseSchedule == null){
+            Toast.makeText(getApplicationContext(), "This course is not open for enrollment yet!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        int courseScheduleStart = Integer.parseInt(courseSchedule.getStartTime().substring(0,2))*60 + Integer.parseInt(courseSchedule.getStartTime().substring(3));
+        int courseScheduleEnd = Integer.parseInt(courseSchedule.getEndTime().substring(0,2))*60 + Integer.parseInt(courseSchedule.getEndTime().substring(3));
+
+        for(ScheduleItem schedule : schedules){
+            int scheduleStart = Integer.parseInt(schedule.getStartTime().substring(0,2))*60 + Integer.parseInt(schedule.getStartTime().substring(3));
+            int scheduleEnd = Integer.parseInt(schedule.getEndTime().substring(0,2))*60 + Integer.parseInt(schedule.getEndTime().substring(3));
+
+            if(courseSchedule.getDay() == schedule.getDay()){
+                if(courseScheduleEnd >= scheduleStart && scheduleEnd >= courseScheduleEnd){
+                    Toast.makeText(getApplicationContext(), "Schedule conflict", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if(courseScheduleStart <= scheduleEnd && courseScheduleEnd>=scheduleEnd){
+                    Toast.makeText(getApplicationContext(), "Schedule conflict", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                if(courseScheduleStart == scheduleStart || courseScheduleEnd == scheduleEnd ){
+                    Toast.makeText(getApplicationContext(), "Schedule conflict", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
+
+
+
+
+
+        return true;
     }
 
     private void getCourseData() {
