@@ -58,7 +58,7 @@ public class StudentMethodsTest {
     public void tearDown() {
         ActivityScenario<CourseEditor> courseEditorScenario = ActivityScenario.launch(CourseEditor.class);
         courseEditorScenario.onActivity(activity -> {
-            activity.removeCourse("TST7883");
+            activity.removeCourse(course.getId());
         });
         courseEditorScenario.close();
 

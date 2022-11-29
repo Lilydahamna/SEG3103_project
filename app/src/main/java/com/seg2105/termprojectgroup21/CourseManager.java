@@ -299,7 +299,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             course.put("description", "");
             Task<DocumentReference> addTask = coursesRef.add(course);
 
-            while (!addTask.isComplete()) ;
+            while(!addTask.isComplete());
 
             if (addTask.isSuccessful()) {
                 Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
@@ -310,11 +310,13 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
             }
             else {
                 Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-
             }
         }
         else {
             Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
+            Task<QuerySnapshot> getTask = coursesRef.whereEqualTo("code", code).get();
+            while(!getTask.isComplete());
+            return getTask.getResult().getDocuments().get(0).getReference();
         }
 
         return null;
