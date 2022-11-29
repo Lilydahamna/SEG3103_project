@@ -139,27 +139,29 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
         data.put("student_username", username);
         data.put("course_id", intent.getStringExtra("course_id"));
 
-        db.collection("enrollment").add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        isEnrolled = true;
-                        enrollToggle.setText(R.string.unenroll);
-                        enrollmentDoc = documentReference;
-                        course.enrollSomeStudent();
-                        Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        Task<?> task = db.collection("enrollment").add(data)
+        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                isEnrolled = true;
+                enrollToggle.setText(R.string.unenroll);
+                enrollmentDoc = documentReference;
+                course.enrollSomeStudent();
+                Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        while(!task.isComplete());
     }
 
     public void unenroll() {
-        enrollmentDoc.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+        Task<?> task = enrollmentDoc.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 isEnrolled = false;
@@ -170,6 +172,7 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
             }
         });
 
+        while(!task.isComplete());
     }
 
     private void fetchSchedule() {

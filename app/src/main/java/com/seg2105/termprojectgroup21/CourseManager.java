@@ -282,7 +282,7 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         inputName.setText("");
     }
 
-    public void addCourse(String name, String code) {
+    public DocumentReference addCourse(String name, String code) {
         boolean exists = false;
         for(Course course: courses){
             if(course.getCode().equals(code)){
@@ -305,14 +305,19 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
                 Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
                 clearFields();
                 fetchCourses();
-            } else {
+
+                return addTask.getResult();
+            }
+            else {
                 Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
 
             }
-        }else{
+        }
+        else {
             Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
         }
 
+        return null;
     }
 
 }

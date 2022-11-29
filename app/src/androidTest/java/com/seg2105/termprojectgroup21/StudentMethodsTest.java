@@ -9,23 +9,29 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.seg2105.termprojectgroup21.Objects.Course;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class StudentMethodsTest {
+    Task<DocumentSnapshot> newCourseTask;
     Task<DocumentReference> newUserTask;
+    DocumentReference courseReference;
     DocumentReference studentReference;
+    Course course;
 
     @Before
     public void setUp() {
         ActivityScenario<CourseManager> courseManagerScenario = ActivityScenario.launch(CourseManager.class);
         courseManagerScenario.onActivity(activity -> {
-            activity.addCourse("Student Test Course", "TST7883");
+            courseReference = activity.addCourse("Student Test Course", "TST7883");
+            newCourseTask = courseReference.get();
+            while(!newCourseTask.isComplete());
+            DocumentSnapshot courseSnapshot = newCourseTask.getResult();
+            course = new Course(courseSnapshot.getId(), courseSnapshot.getString("name"), courseSnapshot.getString("code"), courseSnapshot.getString("instructor_username"), ((Number)courseSnapshot.getLong("capacity")).intValue(), courseSnapshot.getString("description"));
         });
         courseManagerScenario.close();
 
@@ -60,7 +66,7 @@ public class StudentMethodsTest {
     @Test
     public void A_test_enroll() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CourseDetails.class);
-        Course course = null; //TODO: get course object of TST7883
+        Course course = this.course;
         intent.putExtra("course_id", course.getId());
         intent.putExtra("name", course.getName());
         intent.putExtra("code", course.getCode());
@@ -77,7 +83,7 @@ public class StudentMethodsTest {
     @Test
     public void B_test_unenroll() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CourseDetails.class);
-        Course course = null; //TODO: get course object of TST7883
+        Course course = this.course;
         intent.putExtra("course_id", course.getId());
         intent.putExtra("name", course.getName());
         intent.putExtra("code", course.getCode());
