@@ -258,6 +258,8 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
                             enrollToggle.setText(R.string.enroll);
                             enrollmentDoc = null;
                             Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Could not un-enroll due to error.", Toast.LENGTH_SHORT).show();
                         }
                     }})
                 .setNegativeButton("Cancel", null).show();
