@@ -8,8 +8,11 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.seg2105.termprojectgroup21.Objects.Course;
 
 import org.junit.After;
@@ -22,6 +25,8 @@ public class StudentMethodsTest {
     DocumentReference courseReference;
     DocumentReference studentReference;
     Course course;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference enrollmentsRef = db.collection("enrollment");
 
     @Before
     public void setUp() {
@@ -72,10 +77,16 @@ public class StudentMethodsTest {
         intent.putExtra("code", course.getCode());
         ActivityScenario<CourseDetails> courseDetailsScenario = ActivityScenario.launch(intent);
 
-        int start = course.getEnrolledStudents();
+        Task<QuerySnapshot> task = enrollmentsRef.whereEqualTo("course_id", course.getId()).get();
+        while(!task.isComplete());
+        int start = task.getResult().size();
         courseDetailsScenario.onActivity( activity -> {
             activity.enroll("TestStudent");
-            assertEquals(start+1, course.getEnrolledStudents());
+
+            Task<QuerySnapshot> task2 = enrollmentsRef.whereEqualTo("course_id", course.getId()).get();
+            while(!task2.isComplete());
+            int end = task2.getResult().size();
+            assertEquals(start+1, end);
         });
 
     }
@@ -89,11 +100,17 @@ public class StudentMethodsTest {
         intent.putExtra("code", course.getCode());
         ActivityScenario<CourseDetails> courseDetailsScenario = ActivityScenario.launch(intent);
 
-        int start = course.getEnrolledStudents();
+        Task<QuerySnapshot> task = enrollmentsRef.whereEqualTo("course_id", course.getId()).get();
+        while(!task.isComplete());
+        int start = task.getResult().size();
         courseDetailsScenario.onActivity( activity -> {
             activity.enroll("TestStudent");
             activity.unenroll();
-            assertEquals(start, course.getEnrolledStudents());
+
+            Task<QuerySnapshot> task2 = enrollmentsRef.whereEqualTo("course_id", course.getId()).get();
+            while(!task2.isComplete());
+            int end = task2.getResult().size();
+            assertEquals(start+1, end);
         });
     }
 

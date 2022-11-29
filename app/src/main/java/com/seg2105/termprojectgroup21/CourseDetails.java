@@ -239,7 +239,6 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
                 isEnrolled = true;
                 enrollToggle.setText(R.string.unenroll);
                 enrollmentDoc = documentReference;
-                course.enrollSomeStudent();
                 Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
             }
         })
@@ -260,7 +259,6 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
                 isEnrolled = false;
                 enrollToggle.setText(R.string.enroll);
                 enrollmentDoc = null;
-                course.unenrollSomeStudent();
                 Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
             }
         });
