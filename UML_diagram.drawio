@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-11-29T03:26:25.514Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36" etag="7rfdGxMEWL_amom_zP5e" version="20.5.3" type="github">
+<mxfile host="app.diagrams.net" modified="2022-11-29T04:03:12.935Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36" etag="bCYWxOjN3jJ9xA_RTkR-" version="20.5.3" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="3279" dy="2139" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4505" dy="2624" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -164,16 +164,16 @@
           <mxGeometry x="1080" y="-60" width="430" height="340" as="geometry" />
         </mxCell>
         <mxCell id="FUKCDuMdCEa6yZgynZya-1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;ScheduleItemAdapter&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~context:Context&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~schedule: ArrayList&amp;lt;&lt;span style=&quot;background-color: initial;&quot;&gt;ScheduleItem&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;~days: String[]&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~listener: onItemClickListener&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+onCreateViewHolder(parent: ViewGroup, viewType:int): UserViewHolder&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+onBindViewHolder(holder: UserViewHolder, position: int): void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="840" y="360" width="410" height="145" as="geometry" />
+          <mxGeometry x="870" y="360" width="410" height="145" as="geometry" />
         </mxCell>
         <mxCell id="FUKCDuMdCEa6yZgynZya-2" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;ScheduleItem&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~course_id: String&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;~start_time: String&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;~end_time: String&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;~day: int&lt;/span&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+getId(): String&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+getStartTime(): String&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+getEndTime(): String&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+getDay(): int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="1370" y="352.5" width="210" height="170" as="geometry" />
         </mxCell>
         <mxCell id="FUKCDuMdCEa6yZgynZya-3" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;StudentViewer&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~db: FirebaseFireStore&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollmentRef: CollectionReference&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~intent: Intent&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~textView: TextView&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~recyclerView: RecyclerView&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~studentAdapter: StudentAdapter&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~students: ArrayList&amp;lt;String&amp;gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;#getStudents(): void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="890" y="-270" width="250" height="170" as="geometry" />
+          <mxGeometry x="890" y="-290" width="250" height="170" as="geometry" />
         </mxCell>
         <mxCell id="FUKCDuMdCEa6yZgynZya-4" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;StudentAdapter&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~context:Context&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~students: ArrayList&amp;lt;&lt;span style=&quot;background-color: initial;&quot;&gt;String&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+onCreateViewHolder(parent: ViewGroup, viewType:int): UserViewHolder&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+onBindViewHolder(holder: UserViewHolder, position: int): void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="1190" y="-240" width="410" height="110" as="geometry" />
+          <mxGeometry x="1230" y="-290" width="410" height="110" as="geometry" />
         </mxCell>
         <mxCell id="FUKCDuMdCEa6yZgynZya-5" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;CourseViewer&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~db: FirebaseFireStore&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~courseRef: CollectionReference&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollmentRef: CollectionReference&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~scheduleRef: CollectionReference&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~sharedPref: SharedPreferences&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~recyclerView: RecyclerView&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~courseAdapter: CourseAdapter&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~courses: ArrayList&amp;lt;Course&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~day_picker: Spinner&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~inputName: EditText&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~inputCode: EditText&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~viewToggle: ToggleButton&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~search: Button&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-searchCourse(name: String, code: String, day: int, enrolledOnly: Boolean): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-searchHelper(filteredCourses: ArrayList&amp;lt;Course&amp;gt;, name: String, code: String): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-fetchCourses(): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+getDayInt(day: String): int&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;#onStart: void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+onitemClick(course: Course): void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="-100" y="352.5" width="470" height="325" as="geometry" />
@@ -206,8 +206,129 @@
         <mxCell id="FUKCDuMdCEa6yZgynZya-13" value="" style="triangle;whiteSpace=wrap;html=1;direction=west;fillColor=#000000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="390" y="610" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="FUKCDuMdCEa6yZgynZya-14" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;CourseViewer&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~db: FirebaseFireStore&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~courseRef: CollectionReference&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollmentRef: CollectionReference&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~scheduleRef: CollectionReference&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~sharedPref: SharedPreferences&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollementDoc: DocumentReference&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~intent: Intent&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~recyclerView: RecyclerView&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~itemAdapter: ScheduleItemAdapter&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~schedule: ArrayList&amp;lt;ScheduleItem&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~isEnrolled: Boolean&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~courseName: TextView&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~courseDescription: TextView&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~courseCapacity: TextView&lt;br&gt;&lt;/p&gt;&amp;nbsp;~courseInstructor: TextView&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollToggle: Button&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-getCourseData(): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-checkEnrollment(): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+enroll(): void&lt;/p&gt;&amp;nbsp;+unenroll(): void&lt;br&gt;&amp;nbsp;+fetchSchedule(): void&lt;br&gt;&amp;nbsp;+onItemClick(item: ScheduleItem): void&lt;br&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="-690" y="320" width="470" height="367.5" as="geometry" />
+        <mxCell id="FUKCDuMdCEa6yZgynZya-14" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;CourseDetails&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~db: FirebaseFireStore&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~courseRef: CollectionReference&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollmentRef: CollectionReference&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~scheduleRef: CollectionReference&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~sharedPref: SharedPreferences&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollementDoc: DocumentReference&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~intent: Intent&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~recyclerView: RecyclerView&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~itemAdapter: ScheduleItemAdapter&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~schedule: ArrayList&amp;lt;ScheduleItem&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~isEnrolled: Boolean&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 4px;&quot;&gt;~courseName: TextView&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~courseDescription: TextView&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~courseCapacity: TextView&lt;br&gt;&lt;/p&gt;&amp;nbsp;~courseInstructor: TextView&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;~enrollToggle: Button&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-getCourseData(): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;-checkEnrollment(): void&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+enroll(): void&lt;/p&gt;&amp;nbsp;+unenroll(): void&lt;br&gt;&amp;nbsp;+fetchSchedule(): void&lt;br&gt;&amp;nbsp;+onItemClick(item: ScheduleItem): void&lt;br&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-685" y="320" width="470" height="367.5" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-15" value="" style="endArrow=none;html=1;rounded=0;entryX=0.002;entryY=0.591;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.007;exitY=0.461;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="fP5dS_6nymFe7e1dq4BX-4" target="FUKCDuMdCEa6yZgynZya-0">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="160" as="sourcePoint" />
+            <mxPoint x="790" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-16" value="redirect&lt;br&gt;to" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="960" y="105" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-17" value="" style="triangle;whiteSpace=wrap;html=1;direction=east;fillColor=#000000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1020" y="120" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-19" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.157;exitY=1.003;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.677;entryY=-0.016;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FUKCDuMdCEa6yZgynZya-0" target="FUKCDuMdCEa6yZgynZya-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="410" as="sourcePoint" />
+            <mxPoint x="790" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-20" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.003;entryY=0.467;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FUKCDuMdCEa6yZgynZya-1" target="FUKCDuMdCEa6yZgynZya-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="410" as="sourcePoint" />
+            <mxPoint x="790" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-22" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.876;exitY=1.008;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FUKCDuMdCEa6yZgynZya-0">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="410" as="sourcePoint" />
+            <mxPoint x="1457" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-23" value="create" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1450" y="290" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-24" value="0..*" style="resizable=0;align=left;verticalAlign=bottom;labelBackgroundColor=none;fontSize=12;" connectable="0" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1459.9966666666664" y="350.00333333333344" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-25" value="contains&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1140" y="300" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-26" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-120" y="40" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-27" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1150" y="335" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-28" value="contains&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1270" y="400" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-30" value="0..*" style="resizable=0;align=left;verticalAlign=bottom;labelBackgroundColor=none;fontSize=12;" connectable="0" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1349.9966666666664" y="420.00333333333344" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-31" value="" style="triangle;whiteSpace=wrap;html=1;direction=east;fillColor=#000000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1330" y="410" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-32" value="" style="endArrow=none;html=1;rounded=0;entryX=0.807;entryY=1.011;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.031;exitY=-0.004;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FUKCDuMdCEa6yZgynZya-0" target="FUKCDuMdCEa6yZgynZya-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="80" as="sourcePoint" />
+            <mxPoint x="790" y="30" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-33" value="" style="triangle;whiteSpace=wrap;html=1;direction=north;fillColor=#000000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1120" y="-110" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-34" value="redirect&amp;nbsp;&lt;br&gt;to" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1090" y="-100" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-36" value="" style="endArrow=classic;html=1;rounded=0;entryX=-0.006;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.011;exitY=0.413;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FUKCDuMdCEa6yZgynZya-3" target="FUKCDuMdCEa6yZgynZya-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="80" as="sourcePoint" />
+            <mxPoint x="790" y="30" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-37" value="contains&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1130" y="-250" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-38" value="" style="triangle;whiteSpace=wrap;html=1;direction=east;fillColor=#000000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1190" y="-240" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-39" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1200" y="-250" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-40" value="" style="endArrow=block;html=1;rounded=0;endFill=1;startSize=0;strokeWidth=0;endSize=12;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1175.3100000000002" y="320" as="sourcePoint" />
+            <mxPoint x="1174.9700000000003" y="340" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1174.66" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-41" value="" style="endArrow=none;html=1;rounded=0;strokeWidth=1;startSize=0;endSize=6;exitX=0.999;exitY=0.551;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.005;entryY=0.515;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="FUKCDuMdCEa6yZgynZya-14" target="FUKCDuMdCEa6yZgynZya-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="20" y="470" as="sourcePoint" />
+            <mxPoint x="70" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-42" value="" style="triangle;whiteSpace=wrap;html=1;direction=west;fillColor=#000000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-180" y="498.75" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-43" value="redirect&lt;br&gt;to" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-170" y="480" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-44" value="" style="endArrow=classic;html=1;rounded=0;labelBackgroundColor=default;strokeColor=default;strokeWidth=1;fontFamily=Helvetica;fontSize=11;fontColor=default;startSize=0;endSize=6;shape=connector;entryX=0.565;entryY=1.006;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="FUKCDuMdCEa6yZgynZya-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-600" y="690" as="sourcePoint" />
+            <mxPoint x="990" y="730" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-610" y="1150" />
+              <mxPoint x="1120" y="1150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-45" value="contains&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1100" y="677.5" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-46" value="" style="triangle;whiteSpace=wrap;html=1;direction=north;fillColor=#000000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1130" y="667.5" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="FUKCDuMdCEa6yZgynZya-47" value="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1100" y="505" width="30" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
