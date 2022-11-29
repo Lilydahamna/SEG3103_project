@@ -21,7 +21,6 @@ import org.junit.Test;
 
 public class StudentMethodsTest {
     Task<DocumentSnapshot> newCourseTask;
-    Task<DocumentReference> newUserTask;
     DocumentReference courseReference;
     DocumentReference studentReference;
     Course course;
@@ -44,9 +43,7 @@ public class StudentMethodsTest {
         LoginScenario.onActivity(new ActivityScenario.ActivityAction<Login>() {
             @Override
             public void perform(Login activity) {
-                newUserTask = activity.registerUser("TestStudent", "password", "Student");
-                while(!newUserTask.isComplete());
-                studentReference = newUserTask.getResult();
+                studentReference = activity.registerUser("TestStudent", "password", "Student");
             }
         });
 

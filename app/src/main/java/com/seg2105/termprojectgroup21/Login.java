@@ -77,7 +77,7 @@ public class Login extends AppCompatActivity {
         return !username.equals("") && !password.equals("");
     }
 
-    public Task<DocumentReference> registerUser(String username, String password, String role) {
+    public DocumentReference registerUser(String username, String password, String role) {
 
         if(!properCredentials(username, password)) {
             Toast.makeText(getApplicationContext(), "Please enter a valid username/password.", Toast.LENGTH_SHORT).show();
@@ -96,12 +96,15 @@ public class Login extends AppCompatActivity {
                 while(!addTask.isComplete());
                 if(addTask.isSuccessful()){
                     Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
-                    return addTask;
+                    return addTask.getResult();
                 }else{
                     Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(this, "Username already exists.", Toast.LENGTH_SHORT).show();
+                Task<QuerySnapshot> getTask = usersRef.whereEqualTo("username", username).get();
+                while(!getTask.isComplete());
+                return getTask.getResult().getDocuments().get(0).getReference();
             }
         }else{
             Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show();
