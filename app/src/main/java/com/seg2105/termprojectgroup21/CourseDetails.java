@@ -83,17 +83,7 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
         enrollToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEnrolled) {
-                    new AlertDialog.Builder(getApplicationContext())
-                            .setTitle("Un-enrollment")
-                            .setMessage("Are you sure you want to un-enroll from this course?")
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setPositiveButton("Un-enroll", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    unenroll();
-                            }})
-                            .setNegativeButton("Cancel", null).show();
-                }
+                if(isEnrolled) {unenroll();}
                 else enroll(sharedPref.getString("username", ""));
             }
         });
@@ -255,17 +245,23 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
     }
 
     public void unenroll() {
-        Task<?> task = enrollmentDoc.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                isEnrolled = false;
-                enrollToggle.setText(R.string.enroll);
-                enrollmentDoc = null;
-                Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
-            }
-        });
+        new AlertDialog.Builder(this)
+                .setTitle("Un-enrollment")
+                .setMessage("Are you sure you want to un-enroll from this course?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Un-enroll", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Task<Void> task = enrollmentDoc.delete();
+                        while(!task.isComplete());
+                        if(task.isSuccessful()){
+                            isEnrolled = false;
+                            enrollToggle.setText(R.string.enroll);
+                            enrollmentDoc = null;
+                            Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
+                        }
+                    }})
+                .setNegativeButton("Cancel", null).show();
 
-        while(!task.isComplete());
     }
 
     private void fetchSchedule() {
