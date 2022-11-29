@@ -77,11 +77,11 @@ public class Login extends AppCompatActivity {
         return !username.equals("") && !password.equals("");
     }
 
-    public void registerUser(String username, String password, String role) {
+    public Task<DocumentReference> registerUser(String username, String password, String role) {
 
         if(!properCredentials(username, password)) {
             Toast.makeText(getApplicationContext(), "Please enter a valid username/password.", Toast.LENGTH_SHORT).show();
-            return;
+            return null;
         }
 
         Task<QuerySnapshot> task = usersRef.whereEqualTo("username", username).get();
@@ -96,6 +96,7 @@ public class Login extends AppCompatActivity {
                 while(!addTask.isComplete());
                 if(addTask.isSuccessful()){
                     Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                    return addTask;
                 }else{
                     Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show();
                 }
@@ -106,6 +107,8 @@ public class Login extends AppCompatActivity {
             Toast.makeText(this, "An error has occurred.", Toast.LENGTH_SHORT).show();
 
         }
+
+        return null;
     }
 
     public void loginUser(String username, String password) {

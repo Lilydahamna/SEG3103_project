@@ -12,7 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.junit.After;
 import org.junit.Test;
 
-public class TestRegisterUser {
+public class TestAuthentication {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersRef = db.collection("users");
     int startSize, endSize;

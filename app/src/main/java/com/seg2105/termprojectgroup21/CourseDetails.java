@@ -82,9 +82,19 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
         enrollToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEnrolled) unenroll();
+                if(isEnrolled) {
+                    new AlertDialog.Builder(getApplicationContext())
+                            .setTitle("Un-enrollment")
+                            .setMessage("Are you sure you want to un-enroll from this course?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("Un-enroll", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    unenroll();
+                            }})
+                            .setNegativeButton("Cancel", null).show();
+                }
                 //TODO: Add verification for course capacity and time conflict (both of which should be stored somehow as they are displayed)
-                else if (true /* verification condition */) enroll();
+                else if (true /* verification condition */) enroll(sharedPref.getString("username", ""));
             }
         });
     }
@@ -124,9 +134,9 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
         });
     }
 
-    private void enroll() {
+    public void enroll(String username) {
         Map<String, Object> data = new HashMap<>();
-        data.put("student_username", sharedPref.getString("username", ""));
+        data.put("student_username", username);
         data.put("course_id", intent.getStringExtra("course_id"));
 
         db.collection("enrollment").add(data)
@@ -136,6 +146,7 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
                         isEnrolled = true;
                         enrollToggle.setText(R.string.unenroll);
                         enrollmentDoc = documentReference;
+                        course.enrollSomeStudent();
                         Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -147,24 +158,18 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
                 });
     }
 
-    private void unenroll() {
-        new AlertDialog.Builder(this)
-                .setTitle("Un-enrollment")
-                .setMessage("Are you sure you want to un-enroll from this course?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton("Un-enroll", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        enrollmentDoc.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                isEnrolled = false;
-                                enrollToggle.setText(R.string.enroll);
-                                enrollmentDoc = null;
-                                Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }})
-                .setNegativeButton("Cancel", null).show();
+    public void unenroll() {
+        enrollmentDoc.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                isEnrolled = false;
+                enrollToggle.setText(R.string.enroll);
+                enrollmentDoc = null;
+                course.unenrollSomeStudent();
+                Toast.makeText(getApplicationContext(), "Un-enrolled successfully.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void fetchSchedule() {

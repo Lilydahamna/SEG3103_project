@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Course {
-    String id, name, code, description, instructor_username;
-
-    int capacity;
+    private String id, name, code, description, instructor_username;
+    private int capacity, enrolledStudents;
 
     public Course (String id, String name, String code, String instructor_username, int capacity, String description) {
         this.id = id;
@@ -15,6 +14,7 @@ public class Course {
         this.instructor_username = instructor_username;
         this.capacity = capacity;
         this.description = description;
+        this.enrolledStudents = 0;
     }
 
     public String getId() {
@@ -32,6 +32,28 @@ public class Course {
     public String getInstructor() { return instructor_username; }
 
     public String getDescription() { return description; }
+
+    public boolean enrollSomeStudent() {
+        if (enrolledStudents < capacity) {
+            enrolledStudents++;
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean unenrollSomeStudent() {
+        if (enrolledStudents > 0) {
+            enrolledStudents--;
+            return true;
+        }
+
+        return false;
+    }
+
+    public int getEnrolledStudents() {
+        return enrolledStudents;
+    }
 
     public int getCapacity() { return capacity; }
 
