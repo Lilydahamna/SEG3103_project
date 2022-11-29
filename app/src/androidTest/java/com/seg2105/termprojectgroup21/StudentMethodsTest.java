@@ -58,7 +58,7 @@ public class StudentMethodsTest {
     public void tearDown() {
         ActivityScenario<CourseEditor> courseEditorScenario = ActivityScenario.launch(CourseEditor.class);
         courseEditorScenario.onActivity(activity -> {
-            activity.removeCourse("TST7883");
+            activity.removeCourse(course.getId());
         });
         courseEditorScenario.close();
 
@@ -110,7 +110,7 @@ public class StudentMethodsTest {
             Task<QuerySnapshot> task2 = enrollmentsRef.whereEqualTo("course_id", course.getId()).get();
             while(!task2.isComplete());
             int end = task2.getResult().size();
-            assertEquals(start+1, end);
+            assertEquals(start, end);
         });
     }
 
