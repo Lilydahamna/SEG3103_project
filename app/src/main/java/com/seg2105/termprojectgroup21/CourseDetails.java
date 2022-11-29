@@ -201,20 +201,19 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
     }
 
     private void checkEnrollment() {
-        enrollmentRef.whereEqualTo("student_username", sharedPref.getString("username", "")).whereEqualTo("course_id", intent.getStringExtra("course_id")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    if(!task.getResult().isEmpty()) {
-                        isEnrolled = true;
-                        enrollToggle.setText(R.string.unenroll);
-                        enrollmentDoc = task.getResult().getDocuments().get(0).getReference();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-                }
+        Task<QuerySnapshot> task = enrollmentRef.whereEqualTo("student_username", sharedPref.getString("username", "")).whereEqualTo("course_id", intent.getStringExtra("course_id")).get();
+
+        while(!task.isComplete());
+        if (task.isSuccessful()) {
+            if(!task.getResult().isEmpty()) {
+                isEnrolled = true;
+                enrollToggle.setText(R.string.unenroll);
+                enrollmentDoc = task.getResult().getDocuments().get(0).getReference();
             }
-        });
+        } else {
+            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void enroll(String username) {
@@ -223,24 +222,17 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
             data.put("student_username", username);
             data.put("course_id", intent.getStringExtra("course_id"));
 
-            Task<?> task = db.collection("enrollment").add(data)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            isEnrolled = true;
-                            enrollToggle.setText(R.string.unenroll);
-                            enrollmentDoc = documentReference;
-                            Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+            Task<DocumentReference> task = db.collection("enrollment").add(data);
             while(!task.isComplete());
+            if(task.isSuccessful()){
+                isEnrolled = true;
+                enrollToggle.setText(R.string.unenroll);
+                enrollmentDoc = task.getResult();
+                Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
