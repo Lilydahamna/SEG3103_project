@@ -322,4 +322,44 @@ public class CourseManager extends AppCompatActivity implements CourseAdapter.on
         return null;
     }
 
+    public DocumentReference addCourse(String name, String code, int capacity) {
+        boolean exists = false;
+        for(Course course: courses){
+            if(course.getCode().equals(code)){
+                exists = true;
+                break;
+            }
+        }
+        if(!exists) {
+            Map<String, Object> course = new HashMap<>();
+            course.put("name", name);
+            course.put("code", code);
+            course.put("capacity", capacity);
+            course.put("instructor_username", "");
+            course.put("description", "");
+            Task<DocumentReference> addTask = coursesRef.add(course);
+
+            while(!addTask.isComplete());
+
+            if (addTask.isSuccessful()) {
+                Toast.makeText(getApplicationContext(), "Course addition successful!", Toast.LENGTH_SHORT).show();
+                clearFields();
+                fetchCourses();
+
+                return addTask.getResult();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "A course with that code already exists.", Toast.LENGTH_SHORT).show();
+            Task<QuerySnapshot> getTask = coursesRef.whereEqualTo("code", code).get();
+            while(!getTask.isComplete());
+            return getTask.getResult().getDocuments().get(0).getReference();
+        }
+
+        return null;
+    }
+
 }

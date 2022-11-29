@@ -165,7 +165,7 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
 
     public void addEvent(String doc_id, int day, String start_time, String end_time) {
         // query for event, in case it already exists (in terms of day)
-        scheduleRef.whereEqualTo("course_id", doc_id).whereEqualTo("day", day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        Task<?> task = scheduleRef.whereEqualTo("course_id", doc_id).whereEqualTo("day", day).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -197,6 +197,8 @@ public class CourseEditorInstructor extends AppCompatActivity implements Schedul
                 }
             }
         });
+
+        while(!task.isComplete());
     }
 
     private void clearFields() {

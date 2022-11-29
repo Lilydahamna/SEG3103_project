@@ -31,13 +31,19 @@ public class StudentMethodsTest {
     public void setUp() {
         ActivityScenario<CourseManager> courseManagerScenario = ActivityScenario.launch(CourseManager.class);
         courseManagerScenario.onActivity(activity -> {
-            courseReference = activity.addCourse("Student Test Course", "TST7883");
+            courseReference = activity.addCourse("Student Test Course", "TST7883", 15);
             newCourseTask = courseReference.get();
             while(!newCourseTask.isComplete());
             DocumentSnapshot courseSnapshot = newCourseTask.getResult();
             course = new Course(courseSnapshot.getId(), courseSnapshot.getString("name"), courseSnapshot.getString("code"), courseSnapshot.getString("instructor_username"), ((Number)courseSnapshot.getLong("capacity")).intValue(), courseSnapshot.getString("description"));
         });
         courseManagerScenario.close();
+
+        ActivityScenario<CourseEditorInstructor> courseEditorInstructorScenario = ActivityScenario.launch(CourseEditorInstructor.class);
+        courseEditorInstructorScenario.onActivity(activity -> {
+            activity.addEvent(course.getId(), 0, "00:00", "01:00");
+        });
+        courseEditorInstructorScenario.close();
 
         ActivityScenario<Login> LoginScenario = ActivityScenario.launch((Login.class));
         LoginScenario.onActivity(new ActivityScenario.ActivityAction<Login>() {
