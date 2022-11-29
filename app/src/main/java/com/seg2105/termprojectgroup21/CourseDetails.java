@@ -94,7 +94,7 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
                             }})
                             .setNegativeButton("Cancel", null).show();
                 }
-                else if (verifyEnroll()) enroll(sharedPref.getString("username", ""));
+                else enroll(sharedPref.getString("username", ""));
             }
         });
     }
@@ -228,28 +228,30 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
     }
 
     public void enroll(String username) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("student_username", username);
-        data.put("course_id", intent.getStringExtra("course_id"));
+        if(verifyEnroll()){
+            Map<String, Object> data = new HashMap<>();
+            data.put("student_username", username);
+            data.put("course_id", intent.getStringExtra("course_id"));
 
-        Task<?> task = db.collection("enrollment").add(data)
-        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                isEnrolled = true;
-                enrollToggle.setText(R.string.unenroll);
-                enrollmentDoc = documentReference;
-                Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
-            }
-        });
+            Task<?> task = db.collection("enrollment").add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            isEnrolled = true;
+                            enrollToggle.setText(R.string.unenroll);
+                            enrollmentDoc = documentReference;
+                            Toast.makeText(getApplicationContext(), "Enrolled successfully.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-        while(!task.isComplete());
+            while(!task.isComplete());
+        }
     }
 
     public void unenroll() {
