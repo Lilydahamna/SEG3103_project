@@ -169,9 +169,28 @@ public class StudentMethodsTest {
 
     }
 
+    @Test
+    public void D_test_already_enrolled() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CourseDetails.class);
+        Course course = this.course;
+        intent.putExtra("course_id", course.getId());
+        intent.putExtra("name", course.getName());
+        intent.putExtra("code", course.getCode());
+        ActivityScenario<CourseDetails> courseDetailsScenario = ActivityScenario.launch(intent);
+
+        courseDetailsScenario.onActivity( activity -> {
+            activity.enroll("TestStudent");
+            //does not enroll duplicates
+            activity.enroll("TestStudent");
+            Task<QuerySnapshot> task2 = enrollmentsRef.whereEqualTo("course_id", course.getId()).get();
+            while(!task2.isComplete());
+            int end = task2.getResult().size();
+            assertEquals(1, end);
+        });
+    }
 
     @Test
-    public void D_test_unenroll() {
+    public void E_test_unenroll() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CourseDetails.class);
         Course course = this.course;
         intent.putExtra("course_id", course.getId());
