@@ -250,6 +250,7 @@ public class CourseDetails extends AppCompatActivity implements ScheduleItemAdap
 
     }
     public void unenrollDialog(){
+
         new AlertDialog.Builder(this)
                 .setTitle("Un-enrollment")
                 .setMessage("Are you sure you want to un-enroll from this course?")
