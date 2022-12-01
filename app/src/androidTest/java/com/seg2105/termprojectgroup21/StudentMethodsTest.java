@@ -12,6 +12,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.seg2105.termprojectgroup21.Objects.Course;
 
@@ -31,7 +32,9 @@ public class StudentMethodsTest {
     Course course, course2;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference enrollmentsRef = db.collection("enrollment");
-    boolean flag = false;
+    CollectionReference scheduleRef = db.collection("course_days");
+
+
     @Before
     public void setUp() {
 
@@ -141,10 +144,34 @@ public class StudentMethodsTest {
         });
 
     }
+    @Test
+    public void C_test_noschedule_enroll() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CourseDetails.class);
+        Course course = this.course;
+        intent.putExtra("course_id", course.getId());
+        intent.putExtra("name", course.getName());
+        intent.putExtra("code", course.getCode());
+        ActivityScenario<CourseDetails> courseDetailsScenario = ActivityScenario.launch(intent);
+        Task<QuerySnapshot> scheduleTask = scheduleRef.whereEqualTo("course_id", course.getId()).get();
+        while(!scheduleTask.isComplete());
+        for (QueryDocumentSnapshot doc : scheduleTask.getResult()) {
+            Task<Void> deleteTask = doc.getReference().delete();
+            while(!deleteTask.isComplete());
+        }
+
+        courseDetailsScenario.onActivity( activity -> {
+            activity.enroll("TestStudent");
+            Task<QuerySnapshot> task2 = enrollmentsRef.whereEqualTo("course_id", course.getId()).get();
+            while(!task2.isComplete());
+            int end = task2.getResult().size();
+            assertEquals(0, end);
+        });
+
+    }
 
 
     @Test
-    public void C_test_unenroll() {
+    public void D_test_unenroll() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), CourseDetails.class);
         Course course = this.course;
         intent.putExtra("course_id", course.getId());
